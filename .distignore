@@ -1,0 +1,45 @@
+# ==========================================
+# Generic WordPress Plugin .distignore
+# (Used by 10up/action-wordpress-plugin-deploy)
+# ==========================================
+
+# This file itself
+.distignore
+
+# Git / meta
+.git
+.github
+.gitignore
+.gitattributes
+
+# WordPress.org assets are handled via ASSETS_DIR (.wordpress-org)
+# and moved into SVN /assets, so we don't want them in the plugin ZIP
+.wordpress-org
+
+# Build & dev tooling
+/node_modules
+/dist
+/build
+/vendor-bin
+/tools
+/.editorconfig
+/.php_cs*
+/phpcs.xml*
+/phpstan.neon*
+/phpmd.xml*
+
+# Tests & CI
+/tests
+/phpunit.xml
+/phpunit.xml.dist
+/.travis.yml
+/circle.yml
+
+# Docs only for GitHub / dev; not needed in the installed plugin
+README.md
+CHANGELOG.md
+
+# Misc junk
+*.log
+.DS_Store
+Thumbs.db

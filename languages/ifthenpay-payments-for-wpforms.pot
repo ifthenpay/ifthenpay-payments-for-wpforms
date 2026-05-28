@@ -1,0 +1,483 @@
+# Copyright (C) 2026 ifthenpay | Payments for WPForms
+# This file is distributed under the same license as the ifthenpay | Payments for WPForms package.
+msgid ""
+msgstr ""
+"Project-Id-Version: ifthenpay | Payments for WPForms 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ifthenpay-payments-for-wpforms\n"
+"POT-Creation-Date: 2026-05-25 16:34:42+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: src/Admin/Settings.php:78
+msgid "Enable ifthenpay payments in the Payments tab first."
+msgstr ""
+
+#: src/Admin/Settings.php:82
+msgid "Connect your ifthenpay Backoffice Key in WPForms Settings > Payments first."
+msgstr ""
+
+#: src/Admin/Settings.php:86 src/Builder/Payments.php:212
+msgid "Select an ifthenpay gateway key in the Payments tab first."
+msgstr ""
+
+#: src/Admin/Settings.php:108
+msgid "Backoffice Key"
+msgstr ""
+
+#: src/Admin/Settings.php:112
+msgid "Connect your ifthenpay account to load gateway keys and payment methods."
+msgstr ""
+
+#: src/Admin/Settings.php:121
+msgid "Connection"
+msgstr ""
+
+#: src/Admin/Settings.php:144 src/Admin/Settings.php:193
+#: src/Builder/Payments.php:227 src/Builder/Payments.php:301
+msgid "Unauthorized."
+msgstr ""
+
+#: src/Admin/Settings.php:148
+msgid "You do not have permission to connect ifthenpay."
+msgstr ""
+
+#: src/Admin/Settings.php:156 src/Admin/Settings.php:317
+msgid "Enter a valid Backoffice Key before connecting."
+msgstr ""
+
+#: src/Admin/Settings.php:160
+msgid "The Backoffice is invalid."
+msgstr ""
+
+#. translators: 1: support email link, 2: sign-up link
+
+#: src/Admin/Settings.php:173
+msgid "No WPForms gateway found for this Backoffice Key. If you are an ifthenpay client, %1$s to request a WPForms context gateway. If you are not yet a client, %2$s."
+msgstr ""
+
+#: src/Admin/Settings.php:174
+msgid "contact ifthenpay support"
+msgstr ""
+
+#: src/Admin/Settings.php:175
+msgid "become one here"
+msgstr ""
+
+#: src/Admin/Settings.php:183
+msgid "Backoffice Key connected successfully."
+msgstr ""
+
+#: src/Admin/Settings.php:197
+msgid "You do not have permission to disconnect ifthenpay."
+msgstr ""
+
+#: src/Admin/Settings.php:205
+msgid "ifthenpay Backoffice Key disconnected."
+msgstr ""
+
+#: src/Admin/Settings.php:229 src/Plugin.php:95
+msgid "ifthenpay | Payment Gateway"
+msgstr ""
+
+#: src/Admin/Settings.php:230
+msgid "Connect your Backoffice Key here. Per-form gateway selection and method settings are configured inside the form builder."
+msgstr ""
+
+#: src/Admin/Settings.php:239
+msgid "Connected"
+msgstr ""
+
+#: src/Admin/Settings.php:240
+msgid "Backoffice Key connected. Gateway keys and methods are configured inside the form builder."
+msgstr ""
+
+#: src/Admin/Settings.php:247
+msgid "Disconnected"
+msgstr ""
+
+#: src/Admin/Settings.php:248
+msgid "Enter your Backoffice Key and click Connect to load your WPForms gateways."
+msgstr ""
+
+#: src/Admin/Settings.php:266 src/Admin/Settings.php:314
+msgid "Disconnect"
+msgstr ""
+
+#: src/Admin/Settings.php:267 src/Admin/Settings.php:312
+msgid "Connect"
+msgstr ""
+
+#: src/Admin/Settings.php:313
+msgid "Connecting..."
+msgstr ""
+
+#: src/Admin/Settings.php:315
+msgid "Disconnecting..."
+msgstr ""
+
+#: src/Admin/Settings.php:316
+msgid "Connection request failed. Please try again."
+msgstr ""
+
+#: src/Builder/Field.php:142
+msgid "<p>ifthenpay account connection is required when using the ifthenpay field.</p><p>To proceed, please go to <strong>WPForms Settings » Payments » ifthenpay</strong> and connect your account.</p>"
+msgstr ""
+
+#: src/Builder/Field.php:147
+msgid "<p>{name} must be enabled in the Payments settings when using the field.</p><p>To proceed, please go to <strong>Payments Â» {name}</strong> and check <strong>Enable {name}</strong>.</p>"
+msgstr ""
+
+#: src/Builder/Field.php:152
+msgid "<p>{name} requires a gateway key to be selected.</p><p>To proceed, please go to <strong>Payments Â» {name}</strong> and choose a <strong>Gateway key</strong>.</p>"
+msgstr ""
+
+#: src/Builder/Field.php:228
+msgid "Label"
+msgstr ""
+
+#: src/Builder/Field.php:230
+msgid "Enter text for the form field label."
+msgstr ""
+
+#: src/Builder/Field.php:236
+msgid "Pay now button label"
+msgstr ""
+
+#: src/Builder/Field.php:237 src/Builder/Field.php:426
+#: src/Builder/Field.php:672 src/Builder/Field.php:730
+msgid "Pay now"
+msgstr ""
+
+#: src/Builder/Field.php:238
+msgid "Enter the label for the pay now button."
+msgstr ""
+
+#: src/Builder/Field.php:250
+msgid "Public box CSS classes"
+msgstr ""
+
+#: src/Builder/Field.php:252
+msgid "Add one or more CSS classes to the public ifthenpay field box, separated by spaces."
+msgstr ""
+
+#: src/Builder/Field.php:259
+msgid "Public button CSS classes"
+msgstr ""
+
+#: src/Builder/Field.php:261
+msgid "Add one or more CSS classes to the public ifthenpay pay button, separated by spaces."
+msgstr ""
+
+#: src/Builder/Field.php:268
+msgid "Hide WPForms label"
+msgstr ""
+
+#: src/Builder/Field.php:270
+msgid "Hide the normal WPForms field label on the frontend."
+msgstr ""
+
+#: src/Builder/Field.php:390
+msgid "Label Hidden"
+msgstr ""
+
+#: src/Builder/Field.php:391
+msgid "Every field should have a descriptive label. You can hide the label from the Advanced tab."
+msgstr ""
+
+#: src/Builder/Field.php:399 src/Plugin.php:129
+msgid "Configuration Required"
+msgstr ""
+
+#: src/Builder/Field.php:401
+msgid "Connect your ifthenpay Backoffice Key in WPForms Settings » Payments » ifthenpay to use this field."
+msgstr ""
+
+#: src/Builder/Field.php:451 src/Builder/Field.php:741
+msgid "Ifthenpay | Payment Gateway"
+msgstr ""
+
+#: src/Builder/Field.php:461 src/Builder/Field.php:750
+msgid "How it works:"
+msgstr ""
+
+#. translators: %s: Pay now button label
+
+#: src/Builder/Field.php:464 src/Builder/Field.php:753
+msgid "Click \"%s\" to open the payment window."
+msgstr ""
+
+#: src/Builder/Field.php:465 src/Builder/Field.php:754
+msgid "Closing the payment window or refreshing it will cancel the payment request."
+msgstr ""
+
+#: src/Builder/Field.php:466 src/Builder/Field.php:755
+msgid "Ifthenpay only accepts EUR as the chosen currency."
+msgstr ""
+
+#: src/Builder/Field.php:500
+msgid "This field is disabled because ifthenpay is turned off in the Payments tab for this form."
+msgstr ""
+
+#: src/Builder/Field.php:503
+msgid "This field is disabled because no gateway key is selected in the Payments tab."
+msgstr ""
+
+#: src/Builder/Field.php:506
+msgid "This field is disabled because no payment methods are enabled for the selected gateway."
+msgstr ""
+
+#: src/Builder/Field.php:557
+msgid "Payment methods:"
+msgstr ""
+
+#: src/Builder/Payments.php:121 src/Builder/Payments.php:888
+msgid "Connect WPForms to ifthenpay."
+msgstr ""
+
+#. translators: %s - payment gateway name
+
+#: src/Builder/Payments.php:125
+msgid "To use %s, first add the ifthenpay payment field to your form."
+msgstr ""
+
+#: src/Builder/Payments.php:128 src/Builder/Payments.php:896
+msgid "Learn more about ifthenpay | Payment Gateway."
+msgstr ""
+
+#. translators: %s - payment gateway name
+
+#: src/Builder/Payments.php:141
+msgid "Enable %s"
+msgstr ""
+
+#: src/Builder/Payments.php:145
+msgid "Allow customers to pay through ifthenpay using this form."
+msgstr ""
+
+#. translators: %s - payment provider name
+
+#: src/Builder/Payments.php:151
+msgid "Heads up! %s cannot be enabled yet."
+msgstr ""
+
+#. translators: %s - payment field that is causing a conflict with ifthenpay
+#. field
+
+#: src/Builder/Payments.php:158
+msgid "This form contains another payment field or gateway field that conflicts with ifthenpay: %s."
+msgstr ""
+
+#: src/Builder/Payments.php:211
+msgid "Add the ifthenpay field to this form before enabling ifthenpay."
+msgstr ""
+
+#: src/Builder/Payments.php:213
+msgid "Sending activation request..."
+msgstr ""
+
+#: src/Builder/Payments.php:214 src/Builder/Payments.php:346
+msgid "Your activation request has been sent to support."
+msgstr ""
+
+#: src/Builder/Payments.php:215 src/Builder/Payments.php:351
+msgid "Failed to send the activation email. Please try again later."
+msgstr ""
+
+#: src/Builder/Payments.php:216
+msgid "Server error sending activation request."
+msgstr ""
+
+#: src/Builder/Payments.php:217
+msgid "Loading payment methods..."
+msgstr ""
+
+#: src/Builder/Payments.php:218
+msgid "Unable to load the payment methods for this gateway. Please try again."
+msgstr ""
+
+#: src/Builder/Payments.php:231
+msgid "You do not have permission to load ifthenpay gateway methods."
+msgstr ""
+
+#: src/Builder/Payments.php:235
+msgid "Gateway methods can only be loaded for a saved form that contains the ifthenpay field."
+msgstr ""
+
+#. translators: %s - human-readable time remaining
+
+#: src/Builder/Payments.php:244
+msgid "Please wait %s before changing the gateway again."
+msgstr ""
+
+#: src/Builder/Payments.php:257
+msgid "Select a valid ifthenpay gateway key."
+msgstr ""
+
+#: src/Builder/Payments.php:262
+msgid "Unable to load this gateway configuration."
+msgstr ""
+
+#: src/Builder/Payments.php:305
+msgid "You do not have permission to activate payment methods."
+msgstr ""
+
+#: src/Builder/Payments.php:309
+msgid "Connect a valid Backoffice Key in WPForms Settings > Payments before activating payment methods."
+msgstr ""
+
+#: src/Builder/Payments.php:317
+msgid "Missing gateway, method, or Backoffice Key."
+msgstr ""
+
+#. translators: %s - cooldown time in human readable format
+
+#: src/Builder/Payments.php:324
+msgid "Please wait %s before sending another activation request."
+msgstr ""
+
+#: src/Builder/Payments.php:606
+msgid "Payment Methods"
+msgstr ""
+
+#: src/Builder/Payments.php:609
+msgid "Enable"
+msgstr ""
+
+#: src/Builder/Payments.php:610
+msgid "Method"
+msgstr ""
+
+#: src/Builder/Payments.php:611
+msgid "Logo"
+msgstr ""
+
+#: src/Builder/Payments.php:612
+msgid "Account"
+msgstr ""
+
+#: src/Builder/Payments.php:655
+msgid "This account is loaded from your ifthenpay gateway and cannot be edited here."
+msgstr ""
+
+#. translators: %s - cooldown time in human readable format
+
+#: src/Builder/Payments.php:664
+msgid "Activation request sent. Try again in %s."
+msgstr ""
+
+#: src/Builder/Payments.php:668
+msgid "No accounts."
+msgstr ""
+
+#: src/Builder/Payments.php:672
+msgid "Activate"
+msgstr ""
+
+#: src/Builder/Payments.php:722
+msgid "Default payment method"
+msgstr ""
+
+#: src/Builder/Payments.php:724
+msgid "Default (Auto)"
+msgstr ""
+
+#: src/Builder/Payments.php:740
+msgid "Default description"
+msgstr ""
+
+#: src/Builder/Payments.php:742
+msgid "Shown to customers as the payment description."
+msgstr ""
+
+#: src/Builder/Payments.php:871
+msgid "Gateway key"
+msgstr ""
+
+#: src/Builder/Payments.php:880
+msgid "Choose the gateway key that should be used by this form."
+msgstr ""
+
+#: src/Builder/Payments.php:890
+msgid "Heads up! ifthenpay payments can't be enabled yet."
+msgstr ""
+
+#. translators: %s - settings page link
+
+#: src/Builder/Payments.php:893
+msgid "First, please connect your ifthenpay account on the %s page."
+msgstr ""
+
+#: src/Builder/Payments.php:894
+msgid "WPForms Settings"
+msgstr ""
+
+#: src/Builder/Payments.php:917
+msgid "Ifthenpay payment settings alert"
+msgstr ""
+
+#: src/Builder/Process.php:160
+msgid "ifthenpay pay-by-link completed."
+msgstr ""
+
+#: src/Builder/Process.php:161
+msgid "ifthenpay pay-by-link initialized."
+msgstr ""
+
+#: src/Builder/Process.php:187
+msgid "Payment Failed"
+msgstr ""
+
+#: src/Builder/Process.php:620
+msgid "Missing required parameters."
+msgstr ""
+
+#: src/Plugin.php:96
+msgid "requires WPForms to be installed and active."
+msgstr ""
+
+#: src/Plugin.php:126
+msgid "Opening payment..."
+msgstr ""
+
+#: src/Plugin.php:127
+msgid "Processing payment..."
+msgstr ""
+
+#: src/Plugin.php:128
+msgid "The payment total is not ready yet. Please review the form and try again."
+msgstr ""
+
+#: src/Plugin.php:130
+msgid "Heads up! Another payment gateway is currently active"
+msgstr ""
+
+#: src/Plugin.php:131
+msgid "Another payment gateway is currently active on this form. The ifthenpay button is unavailable while that gateway is active."
+msgstr ""
+
+#: src/Plugin.php:132
+msgid "Unable to open payment"
+msgstr ""
+#. Plugin Name of the plugin/theme
+msgid "ifthenpay | Payments for WPForms"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://ifthenpay.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "ifthenpay Pay by Link integration for WPForms."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "ifthenpay"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://ifthenpay.com/"
+msgstr ""

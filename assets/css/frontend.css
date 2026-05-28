@@ -1,0 +1,249 @@
+.iftp-pbl-live-field {
+    /* Warning system */
+    --iftp-warn-base:              var(--wpforms-label-error-color, #d63638);
+    --iftp-warn-bg:                color-mix(in srgb, var(--iftp-warn-base) 8%, white);
+    --iftp-warn-border:            color-mix(in srgb, var(--iftp-warn-base) 28%, white);
+    --iftp-warn-accent:            var(--iftp-warn-base);
+    --iftp-warn-title:             color-mix(in srgb, var(--iftp-warn-base) 85%, black);
+    --iftp-warn-text:              color-mix(in srgb, var(--iftp-warn-base) 70%, black);
+    --iftp-warn-bt-text:           color-mix(in srgb, var(--iftp-warn-base) 10%, rgb(255 255 255));
+    --iftp-warn-text-dk:           color-mix(in srgb, var(--iftp-warn-base) 55%, black);
+
+    /* WPForms button variables */
+    --iftp-button-bg:              var(--wpforms-button-background-color);
+    --iftp-button-bg-color-alt:     var(--wpforms-button-background-color-alt);
+    --iftp-button-bg-hover:        color-mix(in srgb, var(--iftp-button-bg) 85%, black);
+    --iftp-button-text:            var(--wpforms-button-text-color);
+    --iftp-button-border-color:    var(--wpforms-button-border-color);
+    --iftp-button-border-radius:   var(--wpforms-button-border-radius);
+    --iftp-button-border-style:    var(--wpforms-button-border-style);
+    --iftp-button-border-width:    var(--wpforms-button-border-size);
+    --iftp-button-height:          var(--wpforms-button-size-height);
+    --iftp-button-font-size:       var(--wpforms-button-size-font-size);
+    --iftp-button-padding-h:       var(--wpforms-button-size-padding-h);
+    --iftp-button-transition:      all 0.15s ease-in-out;
+    --iftp-button-font-weight:     500;
+
+    /* Text WPForms varible */
+    --iftp-field-text-label-color:       var(--wpforms-label-color);
+
+    /* WPForms variables for border */
+    --iftp-field-background-color: var(--wpforms-field-background-color);
+    --iftp-field-border-style:     var(--wpforms-field-border-style);
+    --iftp-field-border-radius:    var(--wpforms-field-border-radius);
+    --iftp-field-border-color:     var(--wpforms-field-border-color);
+
+}
+
+.iftp-pbl-field-block-section{
+    background-color: var(--iftp-field-background-color) !important;
+    background-clip: padding-box !important;
+    border-radius: var(--iftp-field-border-radius) !important;
+    color: var(--wpforms-field-text-color) !important;
+    border-width: var(--wpforms-field-border-size) !important;
+    border-style: var(--iftp-field-border-style) !important;
+    border-color: var(--iftp-field-border-color) !important;
+}
+
+.iftp-pbl-field-shell {
+  max-width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.iftp-pbl-field-shell.iftp-pbl-public-box {
+  text-align: left;
+}
+
+.iftp-pbl-preview-container {
+  margin: 16px 0;
+}
+
+.iftp-pbl-header-icon {
+  width: 60px !important;
+}
+
+.iftp-pbl-header-icon img {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.iftp-pbl-header-icon:hover img {
+  filter: brightness(1.08) !important;
+}
+
+.iftp-pbl-preview-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.iftp-pbl-method-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.iftp-pbl-method-item:hover {
+  transform: translateY(-1px);
+}
+
+.iftp-pbl-info {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: var(--iftp-field-text-label-color) !important;
+}
+
+.iftp-pbl-info ul {
+  margin: 4px 0 0;
+  padding-left: 16px;
+}
+
+.iftp-pbl-info li + li {
+  margin-top: 4px;
+}
+
+.iftp-pbl-pay-now-button,
+.iftp-pbl-public-button {
+    height: var(--iftp-button-height) !important;
+    background-color: var(--iftp-button-bg-color-alt, var(--iftp-button-bg)) !important;
+    color: var(--iftp-button-text) !important;
+    border-radius: var(--iftp-button-border-radius) !important;
+    border-style: var(--iftp-button-border-style) !important;
+    border-width: var(--iftp-button-border-width) !important;
+    border-color: var(--iftp-button-border-color) !important;
+    padding: 0 var(--iftp-button-padding-h) !important;
+    font-family: inherit !important;
+    font-size: var(--iftp-button-font-size) !important;
+    font-weight: var(--iftp-button-font-weight) !important;
+    line-height: 100% !important;
+    cursor: pointer !important;
+    transition: var(--iftp-button-transition) !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    appearance: none !important;
+}
+
+.iftp-pbl-pay-now-button:hover,
+.iftp-pbl-public-button:hover{
+    background-color: var(--iftp-button-bg-hover) !important;
+    outline: none !important;
+}
+
+.iftp-pbl-pay-now-button:active,
+.iftp-pbl-public-button:active {
+  background: linear-gradient(
+    0deg,
+    rgb(0 0 0 / 20%),
+    rgb(0 0 0 / 20%)
+), var(--iftp-button-bg-hover), var(--iftp-button-bg);
+}
+
+.iftp-pbl-pay-now-button:disabled,
+.iftp-pbl-public-button:disabled {
+    display:none !important;
+    margin-top: 0 !important;
+}
+
+.iftp-pbl-config-warning,
+.iftp-pbl-runtime-warning,
+.iftp-pbl-conflict-warning{
+  margin-top: 10px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--iftp-warn-text-dk);
+  font-size: 12px;
+}
+
+.iftp-pbl-config-warning .wpforms-iftp-pbl-warning-div,
+.iftp-pbl-runtime-warning .wpforms-iftp-pbl-warning-div,
+.iftp-pbl-conflict-warning .wpforms-iftp-pbl-warning-div,
+.wpforms-iftp-pbl-warning-div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--iftp-warn-bg);
+  padding: 10px 12px;
+  border-radius: var(--iftp-field-border-radius) !important;
+  border-width: var(--wpforms-field-border-size) !important;
+  border-style: var(--iftp-field-border-style) !important;
+  border-color: var(--iftp-warn-border) !important;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
+}
+
+.iftp-pbl-config-warning .wpforms-iftp-pbl-warning-title,
+.iftp-pbl-runtime-warning .wpforms-iftp-pbl-warning-title,
+.iftp-pbl-conflict-warning .wpforms-iftp-pbl-warning-title,
+.wpforms-iftp-pbl-warning-title {
+  margin: 0 !important;
+  font-weight: 600 !important;
+  color: var(--iftp-warn-title) !important;
+  font-size: 15px !important;
+  line-height: 1.4;
+}
+
+.wpforms-iftp-pbl-warning-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wpforms-iftp-pbl-warning-message {
+  margin: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: var(--iftp-warn-text-dk) !important;
+}
+
+@keyframes iftp-pbl-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(0 96 156 / 0%);
+  }
+
+  50% {
+    box-shadow: 0 0 0 0.55rem rgb(0 96 156 / 12%);
+  }
+}
+
+.iftp-pbl-method-item.is-default span {
+  outline-offset: 2px;
+}
+
+.iftp-pbl-methods-row{
+  display: flow;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.iftp-pbl-live-field.iftp-pbl-is-blocked .iftp-pbl-methods-section,
+.iftp-pbl-live-field.iftp-pbl-is-blocked .iftp-pbl-info {
+  display: none !important;
+}
+
+.iftp-pbl-methods-section-title {
+  color: var(--iftp-field-text-label-color) !important;
+}
+
+.iftp-pbl-header-title{
+  color: var(--iftp-field-text-label-color) !important;
+}
+
+.iftp-pbl-header-subtitle{
+  color: var(--iftp-field-text-label-color) !important;
+}
+
+.iftp-pbl-hide-wpforms-button .wpforms-submit-container,
+.iftp-pbl-hide-wpforms-button input[type="submit"],
+.iftp-pbl-hide-wpforms-button button[type="submit"],
+.iftp-pbl-hide-wpforms-button .wpforms-submit,
+.iftp-pbl-hide-wpforms-button .wpforms-page-button {
+  display: none !important;
+}

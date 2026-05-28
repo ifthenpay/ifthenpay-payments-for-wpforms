@@ -1,0 +1,197 @@
+:root {
+    --iftp-warn-base:    var(--wpforms-label-error-color, #d63638);
+    --iftp-warn-bg:      color-mix(in srgb, var(--iftp-warn-base) 8%, white);
+    --iftp-warn-border:  color-mix(in srgb, var(--iftp-warn-base) 28%, white);
+    --iftp-warn-accent:  var(--iftp-warn-base);
+    --iftp-warn-title:   color-mix(in srgb, var(--iftp-warn-base) 85%, black);
+    --iftp-warn-text:    color-mix(in srgb, var(--iftp-warn-base) 70%, black);
+    --iftp-warn-text-dk: color-mix(in srgb, var(--iftp-warn-base) 55%, black);
+}
+
+.iftp-settings-card {
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.iftp-settings-card strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.iftp-settings-status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.iftp-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.iftp-status-pill.is-connected {
+  background: #edf7ed;
+  color: #156c2f;
+}
+
+.iftp-status-pill.is-disconnected {
+  background: #fff4e5;
+  color: #8a4b00;
+}
+
+.iftp-status-pill.is-error {
+  background: var(--iftp-warn-bg);
+  color: var(--iftp-warn-title);
+}
+
+.iftp-pbl-methods-table {
+  border: 1px solid #c3c4c7;
+  border-collapse: collapse;
+  border-radius: 4px;
+  border-spacing: 0;
+  width: 100%;
+  max-width: 620px;
+  margin-bottom: 8px;
+  background: #fff;
+}
+
+.iftp-pbl-methods-panel img {
+  border: none;
+}
+
+.iftp-pbl-is-loading {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.iftp-pbl-methods-loading {
+  color: #50575e;
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
+.iftp-pbl-methods-table thead {
+  background-color: #f6f7f7;
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.iftp-pbl-methods-table th,
+.iftp-pbl-methods-table td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.iftp-pbl-methods-table th {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3c434a;
+}
+
+.iftp-pbl-methods-table tbody tr {
+  background: #fff;
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.iftp-pbl-methods-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.iftp-pbl-methods-table .iftp-pbl-method-row.is-missing-account {
+  color: #646970;
+}
+
+.iftp-method-toggle {
+  text-align: center;
+  width: 72px;
+}
+
+.iftp-method-logo-cell {
+  width: 100px;
+  text-align: center;
+}
+
+.iftp-method-account input {
+  width: 100%;
+  max-width: 100%;
+}
+
+.iftp-pbl-account-input[readonly] {
+  background: #f6f7f7;
+  color: #50575e;
+  cursor: default;
+  pointer-events: none;
+}
+
+.iftp-method-logo {
+  border: none !important;
+  height: 32px;
+  width: auto;
+  max-width: 80px;
+  object-fit: contain;
+  display: block;
+}
+
+.iftp-pbl-no-accounts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.iftp-pbl-no-accounts-label,
+.iftp-pbl-activation-message {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.iftp-pbl-no-accounts-label {
+  color: #50575e;
+}
+
+.iftp-pbl-activate-method {
+  min-height: 30px;
+  font-weight: 600;
+}
+
+.iftp-pbl-activation-message {
+  color: #646970;
+}
+
+.iftp-pbl-activation-message.is-success {
+  color: #0f5132;
+}
+
+.iftp-pbl-activation-message.is-error {
+  color: var(--iftp-warn-title);
+}
+
+.iftp-pbl-preview-container {
+  margin-top: 12px;
+}
+
+.iftp-pbl-preview-container .wpforms-alert {
+  margin-top: 6px;
+}
+
+.iftp-pbl-method-item:hover {
+  transform: translateY(-1px);
+}
+
+.iftp-pbl-activate-method-button{
+    vertical-align: baseline !important;
+    color: #2271b1;
+    border: none !important;
+    padding-left: 5px !important;
+    background: #fff0 !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}

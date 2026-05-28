@@ -1,0 +1,13 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Ifthenpay\\WPForms\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ifthenpay\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {}
+}
