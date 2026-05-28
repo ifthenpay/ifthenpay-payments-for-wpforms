@@ -1,0 +1,54 @@
+name: Deploy to WordPress.org & GitHub Release
+
+on:
+  push:
+    tags:
+      - "v*" # e.g. v1.0.0
+
+env:
+  # 🔧 CHANGE PER PLUGIN
+  PLUGIN_SLUG: ifthenpay-payments-for-wpforms # WP.org slug
+  PHP_VERSION: "8.2" # Target PHP version for CI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer
+
+      - name: Install Composer dependencies (no dev)
+        run: composer install --no-dev --optimize-autoloader
+
+      # If you add JS/asset builds later, do it here:
+      # - name: Build frontend assets
+      #   run: |
+      #     npm ci
+      #     npm run build
+
+      - name: Deploy to WordPress.org
+        id: deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          generate-zip: true # also generate a ZIP from SVN trunk
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: ${{ env.PLUGIN_SLUG }}
+          ASSETS_DIR: .wordpress-org # .wordpress-org -> SVN /assets
+
+      - name: Create / update GitHub Release with ZIP
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ steps.deploy.outputs.zip-path }}
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
