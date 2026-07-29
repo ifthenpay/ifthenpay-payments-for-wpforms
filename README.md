@@ -80,7 +80,7 @@ Yes. WPForms coupon fields are fully supported and discounts are automatically c
 
 <details>
 <summary><strong>Which payment methods are supported?</strong></summary>
-Any ifthenpay method attached to your Gateway Key (e.g. Multibanco, MB WAY, Payshop, Credit Card, Cofidis, Google Pay, Apple Pay, Pix).
+Any ifthenpay method attached to your Gateway Key (e.g. Multibanco, MB WAY, Payshop, Credit Card, Google Pay, Apple Pay, Pix).
 </details>
 
 <details>
