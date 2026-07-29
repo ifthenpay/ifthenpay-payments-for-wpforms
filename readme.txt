@@ -56,7 +56,7 @@ No. This version supports only one-time payments via pay-by-link.
 No. The plugin does not store card numbers or full banking details. Only minimal references required for payment matching are stored.
 
 = Which payment methods are supported? =
-Any method enabled on your ifthenpay Gateway Key (e.g. Multibanco, MB WAY, Payshop, Credit Card, Cofidis, Google Pay, Apple Pay, Pix).
+Any method enabled on your ifthenpay Gateway Key (e.g. Multibanco, MB WAY, Payshop, Credit Card, Google Pay, Apple Pay, Pix).
 
 = How does the payment process work? =
 Customers submit a WPForm and are presented with a secure payment page (modal or popup). After completing payment, ifthenpay sends a callback to update the payment status automatically.
