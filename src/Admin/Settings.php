@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ifthenpay\WPForms\Admin;
 
-use Ifthenpay\WPForms\Api\IfthenpayClient;
+use Ifthenpay\WPForms\Api\Ifthenpay\IfthenpayClient;
 
 if ( ! defined( 'ABSPATH' ) ) {
     die( 'Are you sure?' );

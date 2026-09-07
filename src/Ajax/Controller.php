@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ifthenpay\WPForms\Ajax;
 
-use Ifthenpay\WPForms\Builder\Process;
+use Ifthenpay\WPForms\Api\WPForms\Process;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Are you sure?' );

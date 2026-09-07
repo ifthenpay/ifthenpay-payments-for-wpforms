@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Ifthenpay\WPForms\Admin\Settings;
-use Ifthenpay\WPForms\Builder\Field;
-use Ifthenpay\WPForms\Builder\Payments;
-use Ifthenpay\WPForms\Builder\Process;
+use Ifthenpay\WPForms\Api\WPForms\Field;
+use Ifthenpay\WPForms\Api\WPForms\Payments;
+use Ifthenpay\WPForms\Api\WPForms\Process;
 use Ifthenpay\WPForms\Cron\ExpiredPaymentsCron;
 use Ifthenpay\WPForms\Templates\ComplexFormTemplate;
 use Ifthenpay\WPForms\Templates\ExampleFormTemplate;

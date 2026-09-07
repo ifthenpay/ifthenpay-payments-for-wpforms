@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * ifthenpay's own hosted Pay By Link page stops accepting the payment once the
  * "expire days" sent when the link was created has passed (see
- * Builder\Process::handle_process()) — a WPForms payment row left "pending" past that
+ * Api\WPForms\Process::handle_process()) — a WPForms payment row left "pending" past that
  * point can never be completed, and would otherwise stay pending forever. This sweeps
  * those rows once a day, mirroring the daily expiry cron used by
  * ifthenpay-payments-for-contactform7 (Activation + EntryRepository::mark_expired_pending())
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WPForms\Db\Payments\ValueValidator::get_allowed_one_time_statuses() — so a swept
  * payment is marked "failed" instead. That's already a non-terminal status a later
  * ifthenpay webhook can still resolve to "completed" (see
- * Builder\Process::mark_wpforms_payments_status()), the same way a Multibanco/Payshop
+ * Api\WPForms\Process\PaymentRecordStore::mark_wpforms_payments_status()), the same way a Multibanco/Payshop
  * reference reported cancelled/failed can still genuinely get paid afterwards.
  */
 final class ExpiredPaymentsCron {
 
 	private const HOOK = 'iftp_pbl_expire_payments';
 
-	/** Mirrors the expire_days sent to ifthenpay's Pay By Link API (see Builder\Process::handle_process()). */
+	/** Mirrors the expire_days sent to ifthenpay's Pay By Link API (see Api\WPForms\Process::handle_process()). */
 	private const EXPIRE_DAYS = 1;
 
 	/** Upper bound on rows swept per run, so a large backlog can't turn one cron tick into a long-running request. */
@@ -63,7 +63,7 @@ final class ExpiredPaymentsCron {
 		foreach ( $this->find_expired_pending_ids() as $payment_id ) {
 			// The candidate list was read a moment ago — re-confirm the row is still
 			// "pending" immediately before writing, since a concurrent ifthenpay webhook
-			// (Builder\Process::handle_webhook_success()) may have resolved it to
+			// (Api\WPForms\Process\WebhookHandler::handle_webhook_success()) may have resolved it to
 			// "completed" (or "cancelled"/"failed") in between. Without this a still-open
 			// batch could clobber a payment that was genuinely confirmed paid moments ago.
 			$current = $payment->get( $payment_id, [ 'cap' => false ] );
