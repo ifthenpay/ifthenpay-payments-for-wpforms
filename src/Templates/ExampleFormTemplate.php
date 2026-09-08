@@ -32,11 +32,12 @@ class ExampleFormTemplate extends \WPForms_Template {
 		$this->priority    = 0;
 		$this->description = __( 'A ready-made example form showing the ifthenpay | Payment Gateway field alongside common field types.', 'ifthenpay-payments-for-wpforms' );
 		$this->icon        = IFTP_PBL_URL . 'assets/images/icon_templates.svg';
-		// Deliberately no $this->thumbnail: WPForms only wraps the card image in
-		// .wpforms-template-thumbnail-placeholder (small, centered) when the thumbnail is
-		// empty — see templates/builder/templates-item.php:48-61. Set it to anything and
-		// WPForms instead renders that image full-bleed across the whole card, assuming a
-		// properly-sized screenshot; our icon isn't one, so it was rendering stretched.
+		// Reuses $icon as the thumbnail so WPForms renders it edge-to-edge (see
+		// templates/builder/templates-item.php:48-61) instead of behind its generic
+		// placeholder icon. The white padding/background around it, the card's hover
+		// border, and the "Create Form" button color are brand-matched via CSS scoped to
+		// this template's card ID — see Plugin::template_card_css().
+		$this->thumbnail   = IFTP_PBL_URL . 'assets/images/icon_templates.svg';
 
 		$this->data = [
 			'fields'   => [

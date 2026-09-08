@@ -106,6 +106,80 @@ final class Plugin {
 
 		new ExampleFormTemplate();
 		new ComplexFormTemplate();
+
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_template_card_styles' ] );
+	}
+
+	/**
+	 * Brands the ifthenpay template cards (thumbnail background, hover border, "Create
+	 * Form" button) on WPForms' template pickers — the standalone Templates page and the
+	 * builder's Add New Form screen both render the same markup via
+	 * \WPForms\Admin\Traits\FormTemplates, which only exposes generic classes/IDs, so
+	 * there's no template-data hook to color these from PHP; CSS scoped to our card IDs
+	 * is the only integration point.
+	 * @return void
+	 */
+	public function enqueue_template_card_styles(): void {
+		if ( ! function_exists( 'wpforms_is_admin_page' ) || ( ! wpforms_is_admin_page( 'templates' ) && ! wpforms_is_admin_page( 'builder' ) ) ) {
+			return;
+		}
+
+		wp_register_style( 'ifthenpay-wpforms-templates', false, [], defined( 'IFTP_PBL_VERSION' ) ? IFTP_PBL_VERSION : '2.0.0' );
+		wp_enqueue_style( 'ifthenpay-wpforms-templates' );
+		wp_add_inline_style( 'ifthenpay-wpforms-templates', $this->template_card_css() );
+	}
+
+	/**
+	 * @return string
+	 */
+	private function template_card_css(): string {
+		$ids = [ '#wpforms-template-ifthenpay-example-form-template', '#wpforms-template-ifthenpay-complex-form-template' ];
+
+		// Ancestor ID repeated on every selector below (both card pages render inside
+		// #wpforms-setup-templates-list) to out-specificity the standalone Templates
+		// page's own admin-form-templates.css — e.g. its
+		// "#wpforms-setup-templates-list .wpforms-template .wpforms-template-thumbnail"
+		// (1 ID + 2 classes) otherwise beats our "#card-id .wpforms-template-thumbnail"
+		// (1 ID + 1 class). The builder page has no such competing rule, which is why
+		// this only showed up on /wpforms-templates and not on wpforms-builder.
+		$thumbnail  = implode( ', ', array_map( static fn( $id ) => "#wpforms-setup-templates-list {$id} .wpforms-template-thumbnail", $ids ) );
+		$image      = implode( ', ', array_map( static fn( $id ) => "#wpforms-setup-templates-list {$id} .wpforms-template-thumbnail img", $ids ) );
+		$select     = implode( ', ', array_map( static fn( $id ) => "#wpforms-setup-templates-list {$id} .wpforms-template-select", $ids ) );
+		$select_hov = implode( ', ', array_map( static fn( $id ) => "#wpforms-setup-templates-list {$id} .wpforms-template-select:hover", $ids ) );
+		$hover      = implode( ', ', array_map(
+			static fn( $id ) => "#wpforms-setup-templates-list {$id}:hover, #wpforms-setup-templates-list {$id}.active",
+			$ids
+		) );
+
+		return "
+			{$thumbnail} {
+				background-color: #e4f3fc;
+			}
+			{$image} {
+				background-color: #ffffff;
+				aspect-ratio: 1;
+				width: 100%;
+				max-width: 350px;
+				min-height: 100%;
+				object-fit: none;
+				object-position: center;
+				margin: 0 auto;
+				display: block;
+				border-radius: 2px 2px 0 0;
+				box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+			}
+			{$hover} {
+				box-shadow: 0 0 0 2px #00609c, 0 3px 4px rgba(0, 0, 0, 0.15);
+			}
+			{$select} {
+				background-color: #00609c;
+				border-color: #00609c;
+			}
+			{$select_hov} {
+				background-color: #004d80;
+				border-color: #004d80;
+			}
+		";
 	}
 
 	/**

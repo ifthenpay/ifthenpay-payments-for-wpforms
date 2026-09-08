@@ -34,8 +34,9 @@ class ComplexFormTemplate extends \WPForms_Template {
 		$this->priority    = 0;
 		$this->description = __( 'A 3-step example checkout showing the ifthenpay | Payment Gateway field alongside page breaks, a payment dropdown, and a spam-check field.', 'ifthenpay-payments-for-wpforms' );
 		$this->icon        = IFTP_PBL_URL . 'assets/images/icon_templates.svg';
-		// See ExampleFormTemplate's docblock: no $this->thumbnail on purpose, so WPForms
-		// uses its own small centered placeholder instead of stretching our icon full-bleed.
+		// See ExampleFormTemplate's docblock re: reusing $icon as $thumbnail and the
+		// CSS-driven card styling.
+		$this->thumbnail   = IFTP_PBL_URL . 'assets/images/icon_templates.svg';
 
 		$this->data = [
 			'fields'   => [

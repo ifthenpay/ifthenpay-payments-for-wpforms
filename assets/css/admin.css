@@ -18,7 +18,7 @@
  */
 #wpforms-template-ifthenpay-example-form-template .wpforms-template-thumbnail-placeholder img,
 #wpforms-template-ifthenpay-complex-form-template .wpforms-template-thumbnail-placeholder img {
-  content: url(../images/icon_templates.svg);
+  content: url("../images/icon_templates.svg");
 }
 
 /*
@@ -36,12 +36,11 @@
 #wpforms-setup-templates-list .wpforms-template#wpforms-template-ifthenpay-example-form-template.selected,
 #wpforms-setup-templates-list .wpforms-template#wpforms-template-ifthenpay-complex-form-template:hover,
 #wpforms-setup-templates-list .wpforms-template#wpforms-template-ifthenpay-complex-form-template.selected {
-  box-shadow: 0 0 0 2px #00609c, 0 3px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 0 2px #00609c, 0 3px 4px rgb(0 0 0 / 15%);
 }
 
 #wpforms-template-ifthenpay-example-form-template .wpforms-template-select,
 #wpforms-template-ifthenpay-complex-form-template .wpforms-template-select {
-  background-color: #00609c;
   border-color: #00609c;
 }
 
@@ -51,7 +50,6 @@
 #wpforms-template-ifthenpay-complex-form-template .wpforms-template-select:hover,
 #wpforms-template-ifthenpay-complex-form-template .wpforms-template-select:active,
 #wpforms-template-ifthenpay-complex-form-template .wpforms-template-select:focus {
-  background-color: #004d7d;
   border-color: #004d7d;
 }
 
