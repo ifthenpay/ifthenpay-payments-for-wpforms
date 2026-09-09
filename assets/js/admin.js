@@ -428,10 +428,158 @@
 		}
 	}
 
+	/**
+	 * Switches the popup confirmation messages section (Payments::render_confirmation_messages())
+	 * into real tab mode — Paid/Pending/Failed/Cancelled as a single row of tabs sharing
+	 * one content area, only the active tab's fields shown. Every panel starts visible in
+	 * markup on purpose: the message field inside each one is a real TinyMCE editor (see
+	 * Payments::sanitize_confirmations()), and TinyMCE renders broken — zero width/height
+	 * — if initialized while its container is display:none. Bound to
+	 * wpformsBuilderConfirmationsReady (fired by WPForms' own settings-confirmations module
+	 * right after it runs its once-off TinyMCE upgrade of every
+	 * ".wpforms-panel-field-confirmations-message" element, ours included, since it
+	 * matches purely by class) so this always runs strictly after that upgrade has
+	 * already happened — by the time any panel but the first is ever shown, its editor is
+	 * already correctly sized.
+	 */
+	function initConfirmationTabs() {
+		const $section = $('.iftp-pbl-confirmations-section');
+		if (!$section.length) {
+			return;
+		}
+
+		$section.addClass('iftp-pbl-tabs-ready');
+		activateConfirmationTab(
+			$section,
+			$section.data('defaultStatus') || 'paid'
+		);
+
+		// The very first activation above must not visibly crossfade in — it's just
+		// switching from "every panel shown" to "only the default one," which shouldn't
+		// look like an animation on page load. iftp-pbl-transitions-ready is added only
+		// afterwards (via a couple of animation frames, so the browser has already
+		// painted the instant switch), so every later, user-driven tab click animates.
+		window.requestAnimationFrame(() => {
+			window.requestAnimationFrame(() => {
+				$section.addClass('iftp-pbl-transitions-ready');
+			});
+		});
+	}
+
+	/**
+	 * Shows one status's panel and hides the rest, crossfading the swap once
+	 * iftp-pbl-transitions-ready is present (see initConfirmationTabs()). A short timeout
+	 * removes the outgoing panel from layout (display:none) only after its fade-out
+	 * finishes, matching the CSS transition duration below.
+	 */
+	function activateConfirmationTab($section, status) {
+		const $tabs = $section.find('.iftp-pbl-confirmations-tab');
+		const $panels = $section.find('.iftp-pbl-confirmations-panel');
+		const $nextPanel = $panels.filter('[data-status="' + status + '"]');
+
+		if (!$nextPanel.length || $nextPanel.hasClass('iftp-pbl-panel-active')) {
+			return;
+		}
+
+		$tabs.removeClass('iftp-pbl-tab-active').attr('aria-selected', 'false');
+		$tabs
+			.filter('[data-status="' + status + '"]')
+			.addClass('iftp-pbl-tab-active')
+			.attr('aria-selected', 'true');
+
+		const $currentPanel = $panels.filter('.iftp-pbl-panel-active');
+		$currentPanel.removeClass('iftp-pbl-panel-active');
+		window.setTimeout(() => {
+			$currentPanel.not($nextPanel).css('display', 'none');
+		}, 200);
+
+		$nextPanel.css('display', 'block');
+		// Forces layout so the class added on the next line actually transitions from the
+		// display:none-driven starting state instead of jumping straight to the end state.
+		void $nextPanel.get(0)?.offsetWidth;
+		$nextPanel.addClass('iftp-pbl-panel-active');
+	}
+
+	/**
+	 * Shows/hides a confirmation panel's Message/Page/Redirect fields (and, on the Paid
+	 * panel, the entry-preview toggle alongside Message) to match its "Confirmation Type"
+	 * select. Deliberately NOT reusing WPForms' own confirmationFieldsToggle() (from its
+	 * settings-confirmations module) — that function only finds anything to hide/show by
+	 * walking up to the closest ".wpforms-builder-settings-block-content" ancestor, which
+	 * only exists on WPForms' own native Confirmations blocks, not this tabbed panel
+	 * layout (see Payments::render_confirmation_messages()) — so it silently no-ops here.
+	 */
+	function syncConfirmationTypeFields($select) {
+		const $panel = $select.closest('.iftp-pbl-confirmations-panel');
+		const type = String($select.val() || 'message');
+
+		$panel
+			.find(
+				'.wpforms-panel-field-confirmations-message, ' +
+					'.wpforms-panel-field-confirmations-page, ' +
+					'.wpforms-panel-field-confirmations-redirect, ' +
+					'.iftp-pbl-confirmations-entry-preview-field'
+			)
+			.each(function () {
+				const $control = $(this);
+				const $row = $control.hasClass(
+					'iftp-pbl-confirmations-entry-preview-field'
+				)
+					? $control
+					: $control.closest('.wpforms-panel-field');
+
+				// The entry-preview toggle only makes sense alongside a Message
+				// confirmation — showing it after a page/URL redirect doesn't apply, since
+				// the customer never sees our own popup in that case at all.
+				const matchesType = $control.hasClass(
+					'iftp-pbl-confirmations-entry-preview-field'
+				)
+					? type === 'message'
+					: $control.hasClass(
+							'wpforms-panel-field-confirmations-' + type
+					  );
+
+				$row.toggle(matchesType);
+			});
+	}
+
+	function initConfirmationTypeFields() {
+		$('.wpforms-panel-field-confirmations-type').each(function () {
+			syncConfirmationTypeFields($(this));
+		});
+	}
+
 	$(function () {
 		syncConfigVisibility();
 		syncDefaultMethodStars();
 		syncFieldAlert();
+
+		$(document).on('wpformsBuilderConfirmationsReady', initConfirmationTabs);
+		$(document).on(
+			'wpformsBuilderConfirmationsReady',
+			initConfirmationTypeFields
+		);
+
+		$(document).on(
+			'change',
+			'.wpforms-panel-field-confirmations-type',
+			function () {
+				syncConfirmationTypeFields($(this));
+			}
+		);
+
+		$(document).on(
+			'click',
+			'.iftp-pbl-confirmations-tab',
+			function (event) {
+				event.preventDefault();
+				const $button = $(this);
+				activateConfirmationTab(
+					$button.closest('.iftp-pbl-confirmations-section'),
+					$button.data('status')
+				);
+			}
+		);
 
 		$(document).on(
 			'change',
@@ -528,6 +676,14 @@
 			'input[name^="fields["][name$="[type]"]',
 			scheduleRequirementsSync
 		);
+
+		// Belt-and-suspenders: the field add/delete/move/update events above should
+		// already keep the "Enable" toggle and its warning in sync live, with no save+
+		// reload needed. This periodic re-check exists only as a safety net in case some
+		// other path changes the form's fields without firing one of those (a third-party
+		// integration, an undo/redo action, etc.) — cheap enough (a few DOM reads, no
+		// network calls) to run this often.
+		window.setInterval(scheduleRequirementsSync, 1500);
 
 		syncPaymentRequirements();
 	});

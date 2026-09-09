@@ -339,6 +339,24 @@
   color: var(--iftp-modal-text) !important;
 }
 
+.iftp-pbl-outcome-modal-entry-preview {
+  display: none;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--iftp-modal-border);
+}
+
+.iftp-pbl-entry-preview-row {
+  margin: 0 0 6px !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  color: var(--iftp-modal-text) !important;
+}
+
+.iftp-pbl-entry-preview-row:last-child {
+  margin-bottom: 0 !important;
+}
+
 @keyframes iftp-pbl-modal-in {
   from {
     opacity: 0;
@@ -349,4 +367,34 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+/*
+ * Form outcome animations — played on the outer .wpforms-container itself once an
+ * external Pay By Link payment resolves (see frontend.js
+ * resolveExternalPayment()/animateFormOutcome()). "closing" recedes the form as if it's
+ * settling behind the popup that's about to appear over it; animateFormOutcome() then
+ * follows this fade-out with a jQuery slideUp() collapsing its height/margin/padding to
+ * nothing too — this class alone only fades/shrinks it in place, which would otherwise
+ * leave its full box still reserving its old space on the page (a blank gap where the
+ * form used to be). "shake" is a quick, self-reverting shake for a cancelled/failed
+ * attempt, since the form stays usable afterwards for another try.
+ */
+.iftp-pbl-form-closing {
+  transition: opacity 320ms ease, transform 320ms ease, filter 320ms ease;
+  transform: translateY(-28px) scale(0.97);
+  opacity: 0;
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+@keyframes iftp-pbl-shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+
+.iftp-pbl-form-shake {
+  animation: iftp-pbl-shake 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }

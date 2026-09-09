@@ -216,7 +216,7 @@ final class Plugin {
 			'ifthenpay-wpforms-frontend',
 			IFTP_PBL_URL . 'assets/js/frontend.js',
 			[ 'jquery' ],
-			IFTP_PBL_VERSION,
+			$this->asset_version( 'assets/js/frontend.js' ),
 			true
 		);
 
@@ -224,7 +224,7 @@ final class Plugin {
 			'ifthenpay-wpforms-frontend',
 			IFTP_PBL_URL . 'assets/css/frontend.css',
 			[],
-			IFTP_PBL_VERSION
+			$this->asset_version( 'assets/css/frontend.css' )
 		);
 
 		wp_localize_script(
@@ -235,6 +235,8 @@ final class Plugin {
 				'ajax_nonce'                      => wp_create_nonce( 'iftp_pbl_frontend' ),
 				'opening_text'                    => __( 'Opening payment...', 'ifthenpay-payments-for-wpforms' ),
 				'processing_text'                 => __( 'Processing payment...', 'ifthenpay-payments-for-wpforms' ),
+				'waiting_external_text'           => __( "Complete your payment in the tab that just opened — we'll update this page automatically.", 'ifthenpay-payments-for-wpforms' ),
+				'warning_popup_blocked'           => __( 'Please allow pop-ups for this site to complete the payment, then try again.', 'ifthenpay-payments-for-wpforms' ),
 				'warning_missing_amount'          => __( 'The payment total is not ready yet. Please review the form and try again.', 'ifthenpay-payments-for-wpforms' ),
 				'warning_config_title'            => __( 'Configuration Required', 'ifthenpay-payments-for-wpforms' ),
 				'warning_payment_error_title'     => __( 'Unable to open payment', 'ifthenpay-payments-for-wpforms' ),
@@ -252,6 +254,19 @@ final class Plugin {
 
 	private function get_payments(): Payments {
 		return $this->payments ??= new Payments( IFTP_PBL_GATEWAY_LABEL, IFTP_PBL_SLUG );
+	}
+
+	/**
+	 * Busts the browser cache on every edit to this specific asset, rather than
+	 * IFTP_PBL_VERSION — a fixed release-version string, unrelated to how often these
+	 * particular files change. Falls back to IFTP_PBL_VERSION only if the file is somehow
+	 * missing.
+	 */
+	private function asset_version( string $relative_path ): string {
+		$path  = IFTP_PBL_DIR . $relative_path;
+		$mtime = file_exists( $path ) ? filemtime( $path ) : false;
+
+		return $mtime !== false ? (string) $mtime : IFTP_PBL_VERSION;
 	}
 
 	private function __construct() {}

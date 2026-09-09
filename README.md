@@ -20,6 +20,7 @@ Adds ifthenpay payment methods to WPForms: cards, wallets, and local payment opt
 - [Requirements](#user-content-en-requirements)
 - [Installation](#user-content-en-installation)
 - [Using ifthenpay Alongside Another Payment Gateway](#user-content-en-using-ifthenpay-alongside-another-payment-gateway)
+- [Popup Confirmation Messages](#user-content-en-popup-confirmation-messages)
 - [Frequently Asked Questions](#user-content-en-frequently-asked-questions)
 - [External Services](#user-content-en-external-services)
 - [Screenshots](#user-content-en-screenshots)
@@ -78,6 +79,15 @@ WPForms only allows one active payment method per submission. If a form has both
 - This only applies to gateway fields that are actually visible on the form. A gateway field that's present but hidden by conditional logic does not trigger this behavior.
 - Built-in WPForms fields like Total, Coupon, and single/multiple/checkbox/select payment items are never treated as competing gateways — only PayPal, Stripe, Square, and Authorize.Net fields are.
 
+<a name="en-popup-confirmation-messages"></a>
+### Popup Confirmation Messages
+
+Each ifthenpay-enabled form has its own **Popup Confirmation Messages**, configured in `Create/Edit a form → Payments tab`. These control what customers see in the ifthenpay payment popup for each outcome, and are separate from — and not affected by — WPForms' own Confirmations tab.
+
+- Customize the message shown for each of the four outcomes: **Paid**, **Pending**, **Failed**, and **Cancelled**. Each one is pre-filled with sensible default text that you can edit or leave as-is.
+- For the **Paid** outcome only, choose a Confirmation Type: show a **Message** in the popup, redirect to a WPForms **Page**, or redirect to a **Redirect URL** — the same flexibility as WPForms' native confirmations.
+- Optionally enable **Show entry preview after confirmation message** on the Paid outcome, so customers see a summary of their submitted entry right after the payment confirmation message.
+
 <a name="en-frequently-asked-questions"></a>
 ### Frequently Asked Questions
 
@@ -118,7 +128,7 @@ The entry is marked as Failed. Users can retry the payment depending on your con
 
 <details>
 <summary><strong>Can I customize the payment experience?</strong></summary>
-Yes. You can configure button label, description, and styling within WPForms.
+Yes. You can configure button label, description, and styling within WPForms, plus a separate Popup Confirmation Message for each payment outcome (Paid, Pending, Failed, Cancelled). See <a href="#user-content-en-popup-confirmation-messages">Popup Confirmation Messages</a>.
 </details>
 
 <details>
@@ -215,6 +225,7 @@ Commercial helpdesk available (no direct email required): [helpdesk.ifthenpay.co
 - [Requisitos](#user-content-pt-requisitos)
 - [Instalação](#user-content-pt-instalacao)
 - [Utilizar o ifthenpay em Conjunto com Outro Gateway de Pagamento](#user-content-pt-usar-outro-gateway)
+- [Mensagens de Confirmação no Popup](#user-content-pt-mensagens-confirmacao-popup)
 - [Perguntas Frequentes](#user-content-pt-faq)
 - [Serviços Externos](#user-content-pt-servicos-externos)
 - [Capturas de Ecrã](#user-content-pt-capturas)
@@ -273,6 +284,15 @@ O WPForms apenas permite um método de pagamento ativo por submissão. Se um for
 - Isto aplica-se apenas a campos de gateway que estejam efetivamente visíveis no formulário. Um campo de gateway presente mas oculto por lógica condicional não desencadeia este comportamento.
 - Campos nativos do WPForms como Total, Cupão e itens de pagamento de escolha única/múltipla/checkbox/lista nunca são tratados como gateways concorrentes — apenas os campos PayPal, Stripe, Square e Authorize.Net o são.
 
+<a name="pt-mensagens-confirmacao-popup"></a>
+### Mensagens de Confirmação no Popup
+
+Cada formulário com o ifthenpay ativado tem as suas próprias **Mensagens de Confirmação no Popup**, configuradas em `Criar/Editar um formulário → separador Pagamentos`. Estas controlam o que os clientes veem no popup de pagamento da ifthenpay para cada resultado, e são independentes do separador nativo de Confirmações do WPForms, que não afeta este popup.
+
+- Personalize a mensagem apresentada para cada um dos quatro resultados: **Pago**, **Pendente**, **Falhado** e **Cancelado**. Cada uma começa preenchida com um texto predefinido sensato, que pode editar ou manter como está.
+- Apenas para o resultado **Pago**, escolha um Tipo de Confirmação: apresentar uma **Mensagem** no popup, redirecionar para uma **Página** do WPForms, ou redirecionar para um **URL de Redirecionamento** — com a mesma flexibilidade das confirmações nativas do WPForms.
+- Opcionalmente, ative **Mostrar pré-visualização da entrada após a mensagem de confirmação** no resultado Pago, para que os clientes vejam um resumo da entrada submetida logo após a mensagem de confirmação do pagamento.
+
 <a name="pt-faq"></a>
 ### Perguntas Frequentes
 
@@ -313,7 +333,7 @@ A entrada é marcada como Falhada. Os utilizadores podem tentar novamente o paga
 
 <details>
 <summary><strong>Posso personalizar a experiência de pagamento?</strong></summary>
-Sim. Pode configurar o texto do botão, a descrição e o estilo dentro do WPForms.
+Sim. Pode configurar o texto do botão, a descrição e o estilo dentro do WPForms, além de uma Mensagem de Confirmação no Popup separada para cada resultado do pagamento (Pago, Pendente, Falhado, Cancelado). Consulte <a href="#user-content-pt-mensagens-confirmacao-popup">Mensagens de Confirmação no Popup</a>.
 </details>
 
 <details>
@@ -410,6 +430,7 @@ Helpdesk comercial disponível (sem necessidade de e-mail direto): [helpdesk.ift
 - [Requisitos](#user-content-es-requisitos)
 - [Instalación](#user-content-es-instalacion)
 - [Usar ifthenpay Junto con Otra Pasarela de Pago](#user-content-es-usar-otra-pasarela)
+- [Mensajes de Confirmación del Popup](#user-content-es-mensajes-confirmacion-popup)
 - [Preguntas Frecuentes](#user-content-es-faq)
 - [Servicios Externos](#user-content-es-servicios-externos)
 - [Capturas de Pantalla](#user-content-es-capturas)
@@ -468,6 +489,15 @@ WPForms solo permite un método de pago activo por envío. Si un formulario tien
 - Esto solo se aplica a los campos de pasarela que estén realmente visibles en el formulario. Un campo de pasarela presente pero oculto por lógica condicional no activa este comportamiento.
 - Los campos nativos de WPForms como Total, Cupón y los elementos de pago de selección única/múltiple/casilla/lista nunca se tratan como pasarelas competidoras; solo lo son los campos de PayPal, Stripe, Square y Authorize.Net.
 
+<a name="es-mensajes-confirmacion-popup"></a>
+### Mensajes de Confirmación del Popup
+
+Cada formulario con ifthenpay habilitado tiene sus propios **Mensajes de Confirmación del Popup**, configurados en `Crear/Editar un formulario → pestaña Pagos`. Estos controlan lo que ven los clientes en el popup de pago de ifthenpay para cada resultado, y son independientes de la pestaña nativa de Confirmaciones de WPForms, que no afecta a este popup.
+
+- Personalice el mensaje mostrado para cada uno de los cuatro resultados: **Pagado**, **Pendiente**, **Fallido** y **Cancelado**. Cada uno comienza con un texto predeterminado razonable, que puede editar o dejar tal cual.
+- Solo para el resultado **Pagado**, elija un Tipo de Confirmación: mostrar un **Mensaje** en el popup, redirigir a una **Página** de WPForms, o redirigir a una **URL de Redirección**, con la misma flexibilidad que las confirmaciones nativas de WPForms.
+- Opcionalmente, active **Mostrar vista previa de la entrada después del mensaje de confirmación** en el resultado Pagado, para que los clientes vean un resumen de su entrada enviada justo después del mensaje de confirmación del pago.
+
 <a name="es-faq"></a>
 ### Preguntas Frecuentes
 
@@ -508,7 +538,7 @@ La entrada se marca como Fallida. Los usuarios pueden reintentar el pago según 
 
 <details>
 <summary><strong>¿Puedo personalizar la experiencia de pago?</strong></summary>
-Sí. Puede configurar el texto del botón, la descripción y el estilo dentro de WPForms.
+Sí. Puede configurar el texto del botón, la descripción y el estilo dentro de WPForms, además de un Mensaje de Confirmación del Popup independiente para cada resultado del pago (Pagado, Pendiente, Fallido, Cancelado). Consulte <a href="#user-content-es-mensajes-confirmacion-popup">Mensajes de Confirmación del Popup</a>.
 </details>
 
 <details>
@@ -605,6 +635,7 @@ Helpdesk comercial disponible (sin necesidad de correo directo): [helpdesk.ifthe
 - [Prérequis](#user-content-fr-prerequis)
 - [Installation](#user-content-fr-installation)
 - [Utiliser ifthenpay Avec une Autre Passerelle de Paiement](#user-content-fr-utiliser-autre-passerelle)
+- [Messages de Confirmation de la Popup](#user-content-fr-messages-confirmation-popup)
 - [Questions Fréquentes](#user-content-fr-faq)
 - [Services Externes](#user-content-fr-services-externes)
 - [Captures d'Écran](#user-content-fr-captures)
@@ -663,6 +694,15 @@ WPForms n'autorise qu'une seule méthode de paiement active par soumission. Si u
 - Cela ne s'applique qu'aux champs de passerelle réellement visibles sur le formulaire. Un champ de passerelle présent mais masqué par une logique conditionnelle ne déclenche pas ce comportement.
 - Les champs natifs de WPForms tels que Total, Coupon et les éléments de paiement à choix unique/multiple/case à cocher/liste déroulante ne sont jamais considérés comme des passerelles concurrentes — seuls les champs PayPal, Stripe, Square et Authorize.Net le sont.
 
+<a name="fr-messages-confirmation-popup"></a>
+### Messages de Confirmation de la Popup
+
+Chaque formulaire avec ifthenpay activé dispose de ses propres **Messages de Confirmation de la Popup**, configurés dans `Créer/Modifier un formulaire → onglet Paiements`. Ces messages contrôlent ce que les clients voient dans la popup de paiement ifthenpay pour chaque résultat, et sont indépendants de l'onglet Confirmations natif de WPForms, qui n'affecte pas cette popup.
+
+- Personnalisez le message affiché pour chacun des quatre résultats : **Payé**, **En attente**, **Échoué** et **Annulé**. Chacun démarre avec un texte par défaut pertinent, que vous pouvez modifier ou conserver tel quel.
+- Pour le résultat **Payé** uniquement, choisissez un Type de Confirmation : afficher un **Message** dans la popup, rediriger vers une **Page** WPForms, ou rediriger vers une **URL de Redirection** — avec la même flexibilité que les confirmations natives de WPForms.
+- Activez éventuellement **Afficher un aperçu de l'entrée après le message de confirmation** sur le résultat Payé, afin que les clients voient un résumé de leur entrée soumise juste après le message de confirmation du paiement.
+
 <a name="fr-faq"></a>
 ### Questions Fréquentes
 
@@ -703,7 +743,7 @@ L'entrée est marquée comme Échouée. Les utilisateurs peuvent retenter le pai
 
 <details>
 <summary><strong>Puis-je personnaliser l'expérience de paiement ?</strong></summary>
-Oui. Vous pouvez configurer le libellé du bouton, la description et le style directement dans WPForms.
+Oui. Vous pouvez configurer le libellé du bouton, la description et le style directement dans WPForms, ainsi qu'un Message de Confirmation de la Popup distinct pour chaque résultat de paiement (Payé, En attente, Échoué, Annulé). Voir <a href="#user-content-fr-messages-confirmation-popup">Messages de Confirmation de la Popup</a>.
 </details>
 
 <details>

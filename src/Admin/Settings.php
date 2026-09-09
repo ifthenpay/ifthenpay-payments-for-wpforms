@@ -49,6 +49,7 @@ class Settings
             'default_method' => isset($gatewayMethods['default_method']) ? trim((string) $gatewayMethods['default_method']) : '',
             'description'    => isset($raw['description']) ? trim((string) $raw['description']) : '',
             'methods'        => isset($gatewayMethods['methods']) && is_array($gatewayMethods['methods']) ? $gatewayMethods['methods'] : [],
+            'confirmations'  => isset($raw['confirmations']) && is_array($raw['confirmations']) ? $raw['confirmations'] : [],
         ];
     }
 

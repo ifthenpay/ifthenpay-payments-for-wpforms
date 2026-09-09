@@ -98,34 +98,32 @@ class Field extends \WPForms_Field
         return isset($field['type']) && $field['type'] === $this->type ? true : (bool) $required;
     }
 
+    /**
+     * Deliberately does NOT enqueue admin.js/admin.css under a second handle here —
+     * Payments::enqueue_builder_assets() already enqueues both (as
+     * 'ifthenpay-wpforms-builder') on this same wpforms_builder_enqueues hook, and
+     * reliably runs first: Payments is instantiated on plugins_loaded (priority 20, see
+     * Plugin::init_components()) while Field is only instantiated later, once WPForms
+     * fires its own wpforms_loaded (see Plugin::register_field()) — so Payments' add_action()
+     * call for this hook is always registered, and therefore always fires, before Field's.
+     * Enqueuing the same two files again under a second handle used to make the whole
+     * admin.js IIFE execute twice per builder page load (two independent event bindings,
+     * two debounce timers) — this just attaches this field's own localized data onto the
+     * single already-enqueued script instead.
+     */
     public function builder_enqueues($view): void
     {
         unset($view);
-
-        wp_enqueue_script(
-            'ifthenpay-wpforms-field',
-            IFTP_PBL_URL . 'assets/js/admin.js',
-            ['jquery', 'wpforms-builder'],
-            IFTP_PBL_VERSION,
-            true
-        );
-
-        wp_enqueue_style(
-            'ifthenpay-wpforms-field',
-            IFTP_PBL_URL . 'assets/css/admin.css',
-            [],
-            IFTP_PBL_VERSION
-        );
 
         wp_enqueue_style(
             'ifthenpay-wpforms-frontend',
             IFTP_PBL_URL . 'assets/css/frontend.css',
             [],
-            IFTP_PBL_VERSION
+            $this->asset_version('assets/css/frontend.css')
         );
 
         wp_localize_script(
-            'ifthenpay-wpforms-field',
+            'ifthenpay-wpforms-builder',
             'ifthenpayWpformsField',
             [
                 'type' => $this->type,
@@ -142,7 +140,7 @@ class Field extends \WPForms_Field
             'ifthenpay-wpforms-frontend',
             IFTP_PBL_URL . 'assets/css/frontend.css',
             [],
-            IFTP_PBL_VERSION
+            $this->asset_version('assets/css/frontend.css')
         );
 
         // Same handle Plugin::enqueue_frontend_assets() registers on the real frontend — the
@@ -153,7 +151,7 @@ class Field extends \WPForms_Field
             'ifthenpay-wpforms-frontend',
             IFTP_PBL_URL . 'assets/js/frontend.js',
             ['jquery'],
-            IFTP_PBL_VERSION,
+            $this->asset_version('assets/js/frontend.js'),
             true
         );
     }
@@ -527,8 +525,9 @@ class Field extends \WPForms_Field
 
         $wrapperClass = 'wpforms-field wpforms-field-' . esc_attr($this->type) . ' iftp-pbl-live-field' . ($hidePublicBox ? ' iftp-pbl-box-hidden' : '');
         $wrapperStyle = $hidePublicBox ? 'padding:15px 0 0;margin:0;' : 'margin:16px 0 0;';
+        $confirmations = is_array($availability['config']['confirmations'] ?? null) ? $availability['config']['confirmations'] : [];
 
-        echo '<div class="' . $wrapperClass . '" data-iftp-config-ready="' . esc_attr(!empty($availability['is_ready']) ? '1' : '0') . '" data-iftp-disabled-reason="' . esc_attr((string) $availability['message']) . '" style="' . esc_attr($wrapperStyle) . '">';
+        echo '<div class="' . $wrapperClass . '" data-iftp-config-ready="' . esc_attr(!empty($availability['is_ready']) ? '1' : '0') . '" data-iftp-disabled-reason="' . esc_attr((string) $availability['message']) . '" data-iftp-confirmations="' . esc_attr((string) wp_json_encode($this->build_confirmation_overrides($confirmations))) . '" style="' . esc_attr($wrapperStyle) . '">';
         echo '<input type="hidden" class="iftp-pbl-payment-id-input" name="iftp_pbl_payment_id" value="">';
         echo '<input type="hidden" class="iftp-pbl-paid-now-return-input" name="iftp_pbl_paid_now_return" value="">';
         echo '<input type="hidden" class="iftp-pbl-nonce-input" name="iftp_pbl_nonce" value="' . esc_attr(wp_create_nonce('iftp_pbl_frontend')) . '">';
@@ -557,6 +556,59 @@ class Field extends \WPForms_Field
 
 		echo '<div class="iftp-pbl-runtime-warning" style="display:none;margin-top:10px;max-width:' . esc_attr($boxMaxWidth) . ';"></div>';
         echo '</div>';
+    }
+
+    /**
+     * Builds the data passed to the frontend popup (see assets/js/frontend.js
+     * showOutcomeNotice()/handleOutcome()) so a form's custom confirmation settings can
+     * override this plugin's global default text, or — for paid only — send the
+     * customer to a page/URL instead of showing the popup at all. Only includes a
+     * "message" when the admin actually typed one, so an empty per-form field still falls
+     * back to the global default rather than showing a blank popup. A "page"/"redirect"
+     * type that can't actually resolve to a URL (page deleted, redirect URL left blank)
+     * silently falls back to "message" rather than sending the customer nowhere.
+     *
+     * @param array<string, mixed> $confirmations
+     * @return array<string, array<string, mixed>>
+     */
+    private function build_confirmation_overrides(array $confirmations): array
+    {
+        $overrides = [];
+
+        foreach (['paid', 'pending', 'cancelled', 'failed'] as $status) {
+            $entry = isset($confirmations[$status]) && is_array($confirmations[$status]) ? $confirmations[$status] : [];
+            $message = trim((string) ($entry['message'] ?? ''));
+
+            $statusOverride = [];
+            if ($message !== '') {
+                $statusOverride['message'] = $message;
+            }
+
+            if ($status === 'paid') {
+                $type = (string) ($entry['type'] ?? 'message');
+                $redirectUrl = '';
+
+                if ($type === 'page') {
+                    $pageId = absint($entry['page'] ?? 0);
+                    $redirectUrl = $pageId > 0 ? (string) get_permalink($pageId) : '';
+                } elseif ($type === 'redirect') {
+                    $redirectUrl = trim((string) ($entry['redirect'] ?? ''));
+                }
+
+                $statusOverride['type'] = $redirectUrl !== '' ? $type : 'message';
+                if ($redirectUrl !== '') {
+                    $statusOverride['redirect_url'] = $redirectUrl;
+                }
+            }
+
+            if ($status === 'paid') {
+                $statusOverride['entry_preview'] = !empty($entry['entry_preview']);
+            }
+
+            $overrides[$status] = $statusOverride;
+        }
+
+        return $overrides;
     }
 
     /**
@@ -817,6 +869,20 @@ class Field extends \WPForms_Field
         $slice = function_exists('mb_substr') ? mb_substr($text, 0, $limit) : substr($text, 0, $limit);
 
         return rtrim((string) $slice) . '...';
+    }
+
+    /**
+     * Busts the browser cache on every edit to this specific asset, rather than
+     * IFTP_PBL_VERSION — a fixed release-version string, unrelated to how often these
+     * particular files change. Falls back to IFTP_PBL_VERSION only if the file is somehow
+     * missing.
+     */
+    private function asset_version(string $relativePath): string
+    {
+        $path = IFTP_PBL_DIR . $relativePath;
+        $mtime = file_exists($path) ? filemtime($path) : false;
+
+        return $mtime !== false ? (string) $mtime : IFTP_PBL_VERSION;
     }
 
     /**

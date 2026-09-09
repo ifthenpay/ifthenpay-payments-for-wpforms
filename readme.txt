@@ -46,6 +46,15 @@ All settings are managed within WPForms and your ifthenpay Backoffice. The plugi
 2. Credentials: Ensure your ifthenpay account has an active WPForms Gateway Key with desired payment methods enabled.
 3. Setup: Go to WPForms → Settings → Payments and enter your Backoffice Key.
 4. Form config: Create/Edit a form → Payments tab → Add the Ifthenpay field on your form → enable "ifthenpay | Payment Gateway" and select a Gateway Key.
+5. Confirmation messages: In the same Payments tab, customize the Popup Confirmation Messages shown to customers for each payment outcome (Paid, Pending, Failed, Cancelled).
+
+== Popup Confirmation Messages ==
+
+Each ifthenpay-enabled form has its own Popup Confirmation Messages, configured in Create/Edit a form → Payments tab. These control what customers see in the ifthenpay payment popup for each outcome, and are separate from — and not affected by — WPForms' own Confirmations tab.
+
+* Customize the message shown for each of the four outcomes: Paid, Pending, Failed, and Cancelled. Each one is pre-filled with sensible default text that you can edit or leave as-is.
+* For the Paid outcome only, choose a Confirmation Type: show a Message in the popup, redirect to a WPForms Page, or redirect to a Redirect URL — the same flexibility as WPForms' native confirmations.
+* Optionally enable "Show entry preview after confirmation message" on the Paid outcome, so customers see a summary of their submitted entry right after the payment confirmation message.
 
 == Frequently Asked Questions ==
 
@@ -68,7 +77,7 @@ Yes. WPForms coupon and total fields are fully supported and automatically proce
 The entry is marked as Failed. Customers can retry payment depending on your form setup.
 
 = Can I customize the payment experience? =
-Yes. You can configure button label, payment description, and styling via WPForms.
+Yes. You can configure button label, payment description, and styling via WPForms, plus a separate Popup Confirmation Message for each payment outcome (Paid, Pending, Failed, Cancelled). See "Popup Confirmation Messages" above.
 
 = What happens if my form also has another payment gateway field (PayPal, Stripe, Square, Authorize.Net)? =
 WPForms only allows one active payment method per submission, so the ifthenpay field automatically hides itself (logo, methods, and "Pay now" button) while another gateway's field is visible on the form. It reappears automatically if that other field is hidden again, e.g. by conditional logic. Only PayPal, Stripe, Square, and Authorize.Net fields count as competing gateways; WPForms' own Total, Coupon, and payment item fields do not.
@@ -123,6 +132,7 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 *Removed unused transaction ID tracking and the legacy modal/popup payment display; payments now use a full-page redirect to ifthenpay's hosted page.
 *Fixed: the payment outcome popup no longer reopens on its own after being dismissed, e.g. when switching back to the browser tab, unless the payment status actually changed.
 *Changed: when another WPForms payment gateway field (PayPal, Stripe, Square, Authorize.Net) is active on the form, the ifthenpay field now hides itself instead of showing a warning message.
+*Added: customizable Popup Confirmation Messages per payment outcome (Paid, Pending, Failed, Cancelled), with an optional page/URL redirect and entry preview for the Paid outcome, configurable per form in the Payments tab.
 
 == Upgrade Notice ==
 

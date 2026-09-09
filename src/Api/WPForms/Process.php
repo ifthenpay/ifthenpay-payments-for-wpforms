@@ -9,6 +9,7 @@ use Ifthenpay\WPForms\Api\Ifthenpay\IfthenpayClient;
 use Ifthenpay\WPForms\Api\Ifthenpay\IfthenpayFormData;
 use Ifthenpay\WPForms\Api\Ifthenpay\IfthenpayPayload;
 use Ifthenpay\WPForms\Api\WPForms\Process\EntryManager;
+use Ifthenpay\WPForms\Api\WPForms\Process\EntryPreviewRenderer;
 use Ifthenpay\WPForms\Api\WPForms\Process\PaymentDataPreparer;
 use Ifthenpay\WPForms\Api\WPForms\Process\PaymentRecordStore;
 use Ifthenpay\WPForms\Api\WPForms\Process\WebhookContextStore;
@@ -97,7 +98,7 @@ class Process
 			}
 
 			$amount = IfthenpayFormData::resolve_amount( $fields );
-			if ( ! ( $amount >= 0 && $amount ) ) {
+			if ( $amount < 0 ) {
 				return array(
 					'success' => false,
 					'message' => 'Amount cannot be lower than 0',
@@ -339,6 +340,18 @@ class Process
 			]);
 		}
 
+		// Marks that the browser has genuinely returned from ifthenpay's hosted page for
+		// this payment, distinct from the payment's own status. This is what lets the
+		// original tab's blind background poll (see watchExternalPayment() in
+		// frontend.js, which calls this same endpoint with return_action "poll" — never
+		// one of these three) tell "nothing has happened yet, still pending" apart from
+		// "ifthenpay's flow just concluded still pending" (e.g. a Multibanco/Payshop
+		// reference was only just generated) — the latter should still close the payment
+		// tab and show the popup, per Process::respond_with_current_status().
+		if (in_array($return_action, ['success', 'cancel', 'error'], true)) {
+			$this->paymentRecordStore->update_stored_payment_summary($payment_id, ['browser_returned' => true]);
+		}
+
 		if ($return_action === 'cancel') {
 			$this->respond_with_status($payment_id, 'cancelled');
 		}
@@ -347,9 +360,9 @@ class Process
 			$this->respond_with_status($payment_id, 'failed');
 		}
 
-		// 'success' (and any other/unknown action) only ever reports the payment's real,
-		// current status — never mutates it to "completed" from client-POSTed data. See this
-		// method's docblock.
+		// 'success' and the original tab's own background "poll" action alike only ever
+		// report the payment's real, current status — never mutate it to "completed" from
+		// client-POSTed data. See this method's docblock.
 		$this->respond_with_current_status($payment_id);
 	}
 
@@ -380,16 +393,25 @@ class Process
 		}
 
 		wp_send_json_success(
-			IfthenpayPayload::build_payment_status_response( $status )
+			IfthenpayPayload::build_payment_status_response(
+				$status,
+				'',
+				$this->maybe_build_entry_preview_html( $payment_id, $status ),
+				true
+			)
 		);
 	}
 
 	/**
 	 * Report a payment's real, current status without mutating it — used for the 'success'
 	 * outcome of a gateway return, which is never itself proof of payment (see
-	 * ajax_verify_payment()'s docblock). Only WebhookHandler::handle_webhook_success() may ever
-	 * set "completed"; until it does, this simply reflects "pending" back to the frontend, which
-	 * keeps polling.
+	 * ajax_verify_payment()'s docblock), and for the original tab's own background poll
+	 * (return_action "poll"). Only WebhookHandler::handle_webhook_success() may ever set
+	 * "completed"; until it does, this simply reflects "pending" back to the frontend. The
+	 * "returned" flag (see ajax_verify_payment()) additionally tells a background poll
+	 * that the browser has already genuinely come back from ifthenpay for this payment,
+	 * even though the status itself is still "pending" — e.g. a Multibanco/Payshop
+	 * reference was just generated, so there's nothing more happening on this visit.
 	 */
 	private function respond_with_current_status( int $payment_id ): void {
 		$status = $this->paymentRecordStore->get_wpforms_payment_status( $payment_id );
@@ -397,9 +419,53 @@ class Process
 			$status = 'pending';
 		}
 
+		$summary  = $this->paymentRecordStore->get_stored_payment_summary( $payment_id );
+		$returned = ! empty( $summary['browser_returned'] );
+
 		wp_send_json_success(
-			IfthenpayPayload::build_payment_status_response( $status )
+			IfthenpayPayload::build_payment_status_response(
+				$status,
+				'',
+				$this->maybe_build_entry_preview_html( $payment_id, $status ),
+				$returned
+			)
 		);
+	}
+
+	/**
+	 * Builds the "Show entry preview after confirmation message" HTML for the popup (see
+	 * Payments::render_confirmation_messages()), when the form enables it and the payment
+	 * has actually completed. Never runs for any other status — showing submitted answers
+	 * after a pending/cancelled/failed message isn't what that toggle is for.
+	 */
+	private function maybe_build_entry_preview_html( int $payment_id, string $status ): string {
+		if ( $status !== 'completed' || ! function_exists( 'wpforms' ) ) {
+			return '';
+		}
+
+		$payment = wpforms()->obj( 'payment' )->get( $payment_id, array( 'cap' => false ) );
+		if ( ! $payment || empty( $payment->entry_id ) || empty( $payment->form_id ) ) {
+			return '';
+		}
+
+		$form_data = wpforms()->get( 'form' )->get( (int) $payment->form_id, array( 'content_only' => true ) );
+		if ( ! is_array( $form_data ) ) {
+			return '';
+		}
+
+		$config = Settings::get_form_payment_settings( $form_data );
+		if ( empty( $config['confirmations']['paid']['entry_preview'] ) ) {
+			return '';
+		}
+
+		$entry = wpforms()->obj( 'entry' )->get( (int) $payment->entry_id, array( 'cap' => false ) );
+		if ( ! $entry || empty( $entry->fields ) || ! function_exists( 'wpforms_decode' ) ) {
+			return '';
+		}
+
+		$fields = wpforms_decode( $entry->fields );
+
+		return is_array( $fields ) ? EntryPreviewRenderer::render( $fields ) : '';
 	}
 
 	/**

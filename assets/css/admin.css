@@ -268,3 +268,114 @@
     text-decoration: underline !important;
     cursor: pointer !important;
 }
+
+/*
+ * Popup confirmation messages: one row of tabs (Paid/Pending/Failed/Cancelled) with a
+ * single shared content area below showing only the active tab's fields (see
+ * Payments::render_confirmation_messages()). Custom-built rather than reusing WPForms'
+ * own settings-block chevron/jQuery slideToggle — the active tab's fields crossfade in
+ * via a CSS opacity/transform transition instead of a height-based slide, and the
+ * chevron rotates in place instead of an instant icon swap. See admin.js
+ * initConfirmationTabs() for why every panel starts visible in markup and JS switches
+ * to real tab behavior (hiding every panel but the active one) right after WPForms has
+ * finished upgrading each message field to a TinyMCE editor.
+ */
+.iftp-pbl-confirmations-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  border-bottom: 1px solid #dcdcde;
+}
+
+.iftp-pbl-confirmations-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  margin-bottom: -1px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #646970;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.iftp-pbl-confirmations-tab:hover {
+  color: #1d2327;
+  background-color: #f6f7f7;
+}
+
+.iftp-pbl-confirmations-tab:focus-visible {
+  outline: 2px solid #2271b1;
+  outline-offset: -2px;
+}
+
+.iftp-pbl-confirmations-tab.iftp-pbl-tab-active {
+  color: #1d2327;
+  background-color: #fff;
+  border-color: #dcdcde;
+  border-bottom-color: #fff;
+}
+
+.iftp-pbl-confirmations-tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #a7aaad;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms ease;
+  transform: rotate(-90deg);
+}
+
+.iftp-pbl-confirmations-tab.iftp-pbl-tab-active .iftp-pbl-confirmations-tab-icon {
+  color: #2271b1;
+  transform: rotate(0deg);
+}
+
+.iftp-pbl-confirmations-panels {
+  border: 1px solid #dcdcde;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 14px 16px;
+  background: #fff;
+}
+
+.iftp-pbl-confirmations-panel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.iftp-pbl-confirmations-section.iftp-pbl-tabs-ready .iftp-pbl-confirmations-panel {
+  display: none;
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* The active panel's visible end-state applies unconditionally (not gated behind
+ * iftp-pbl-transitions-ready) so the very first switch into tab mode shows it fully
+ * opaque immediately — only the *animation* of getting there is gated below, so that
+ * first switch is instant and every later, user-driven tab click crossfades. */
+.iftp-pbl-confirmations-section.iftp-pbl-tabs-ready .iftp-pbl-confirmations-panel.iftp-pbl-panel-active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.iftp-pbl-confirmations-section.iftp-pbl-transitions-ready .iftp-pbl-confirmations-panel {
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+/* Tightens the default WPForms core spacing between a field's label and its control,
+ * which otherwise leaves a noticeably large gap here. */
+.iftp-pbl-tight-field > label {
+  display: block;
+  margin-bottom: 4px !important;
+}
+
+.iftp-pbl-tight-field .wp-editor-wrap {
+  margin-top: 0 !important;
+}

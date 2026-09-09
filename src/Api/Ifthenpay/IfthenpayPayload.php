@@ -217,16 +217,26 @@ final class IfthenpayPayload {
 	/**
 	 * Build a compact status response for frontend verification.
 	 *
-	 * @return array<string, string>
+	 * @return array<string, mixed>
 	 */
 	public static function build_payment_status_response(
 		string $status,
-		string $payment_method = ''
+		string $payment_method = '',
+		string $entry_preview_html = '',
+		bool $returned = false
 	): array {
 		$response = [ 'status' => $status ];
 
 		if ( $payment_method !== '' ) {
 			$response['payment_method'] = $payment_method;
+		}
+
+		if ( $entry_preview_html !== '' ) {
+			$response['entry_preview_html'] = $entry_preview_html;
+		}
+
+		if ( $returned ) {
+			$response['returned'] = true;
 		}
 
 		return $response;

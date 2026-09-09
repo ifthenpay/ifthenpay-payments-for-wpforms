@@ -23,6 +23,10 @@ class Payments
     ];
     // Apple Pay and Google Pay are wallet-triggered methods and can't be set as the default.
     private const NON_DEFAULT_ELIGIBLE_ENTITIES = ['APPLE', 'GOOGLE'];
+    // Statuses customers can see in the custom payment popup (see assets/js/frontend.js
+    // showOutcomeNotice()) — distinct from, and not related to, WPForms' own native
+    // per-form Confirmations tab.
+    private const CONFIRMATION_STATUSES = ['paid', 'pending', 'cancelled', 'failed'];
 
     /** @var array<string, mixed> */
     private array $formData;
@@ -116,6 +120,7 @@ class Payments
         $methodsConfig     = $this->sanitize_gateway_methods_config(IfthenpayPayload::get_gateway_methods_config($config, $gatewayKey), $details);
         $defaultMethod     = $this->sanitize_default_method($this->get_gateway_default_method($config, $gatewayKey), $methodsConfig);
         $description       = (string) ($config['description'] ?? '');
+        $confirmations     = isset($config['confirmations']) && is_array($config['confirmations']) ? $config['confirmations'] : [];
         $hasField          = $this->has_ifthenpay_field();
         $conflictingFields = $this->get_conflicting_payment_fields();
 
@@ -169,6 +174,7 @@ class Payments
         echo $this->render_gateway_selector($gatewayKey);
         echo $this->render_methods_table($details, $methodsConfig, $gatewayKey, $defaultMethod);
         echo $this->render_default_config($description);
+        echo $this->render_confirmation_messages($confirmations);
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '</div></div></div>';
     }
@@ -195,8 +201,8 @@ class Payments
             $this->fetch_and_cache_api_data();
         }
 
-        wp_enqueue_script('ifthenpay-wpforms-builder', IFTP_PBL_URL . 'assets/js/admin.js', ['jquery', 'wpforms-builder'], IFTP_PBL_VERSION, true);
-        wp_enqueue_style('ifthenpay-wpforms-builder', IFTP_PBL_URL . 'assets/css/admin.css', [], IFTP_PBL_VERSION);
+        wp_enqueue_script('ifthenpay-wpforms-builder', IFTP_PBL_URL . 'assets/js/admin.js', ['jquery', 'wpforms-builder'], $this->asset_version('assets/js/admin.js'), true);
+        wp_enqueue_style('ifthenpay-wpforms-builder', IFTP_PBL_URL . 'assets/css/admin.css', [], $this->asset_version('assets/css/admin.css'));
 
         wp_localize_script('ifthenpay-wpforms-builder', 'ifthenpayWpformsBuilder', [
             'slug' => $this->slug,
@@ -549,6 +555,9 @@ class Payments
             ? $this->resolve_selected_gateway_key((string) ($config['gateway_key'] ?? ''), $this->gateways)
             : sanitize_text_field((string) ($config['gateway_key'] ?? ''));
         $sanitized['description'] = sanitize_text_field((string) ($config['description'] ?? ''));
+        $sanitized['confirmations'] = $this->sanitize_confirmations(
+            isset($config['confirmations']) && is_array($config['confirmations']) ? $config['confirmations'] : []
+        );
 
         unset($sanitized['methods'], $sanitized['default_method']);
 
@@ -735,6 +744,247 @@ class Payments
             . '<input type="text" id="iftp_pbl_description" name="payments[' . $slug . '][description]" value="' . esc_attr($description) . '" class="regular-text" style="min-width:320px;">'
             . '<p class="description">' . esc_html__('Shown to customers as the payment description.', 'ifthenpay-payments-for-wpforms') . '</p>'
             . '</div></div>';
+    }
+
+    // Statuses that can redirect instead of just showing a popup message — pending,
+    // cancelled and failed can only ever be a message (see render_confirmation_panel()).
+    private const CONFIRMATION_REDIRECTABLE_STATUSES = ['paid'];
+    private const CONFIRMATION_TYPES = ['message', 'page', 'redirect'];
+
+    /**
+     * @param array<string, mixed> $raw
+     * @return array<string, array<string, string>>
+     */
+    private function sanitize_confirmations(array $raw): array
+    {
+        $sanitized = [];
+
+        foreach (self::CONFIRMATION_STATUSES as $status) {
+            $entry = isset($raw[$status]) && is_array($raw[$status]) ? $raw[$status] : [];
+
+            // Rich HTML now that the message field is a real TinyMCE editor (see
+            // render_confirmation_status_block()) — matches how WPForms sanitizes its own
+            // native confirmation message.
+            $sanitized[$status] = [
+                'message' => wp_kses_post((string) ($entry['message'] ?? '')),
+            ];
+
+            if (in_array($status, self::CONFIRMATION_REDIRECTABLE_STATUSES, true)) {
+                $type = (string) ($entry['type'] ?? 'message');
+                $sanitized[$status]['type'] = in_array($type, self::CONFIRMATION_TYPES, true) ? $type : 'message';
+                $sanitized[$status]['page'] = (string) absint($entry['page'] ?? 0);
+                $sanitized[$status]['redirect'] = esc_url_raw((string) ($entry['redirect'] ?? ''));
+            }
+
+            if ($status === 'paid') {
+                $sanitized[$status]['entry_preview'] = !empty($entry['entry_preview']) ? '1' : '0';
+            }
+        }
+
+        return $sanitized;
+    }
+
+    /**
+     * @return array<string, array<string, string>>
+     */
+    private function confirmation_status_meta(): array
+    {
+        return [
+            'paid' => [
+                'label' => __('Paid', 'ifthenpay-payments-for-wpforms'),
+                'placeholder' => __('Your payment was successful. Thank you!', 'ifthenpay-payments-for-wpforms'),
+            ],
+            'pending' => [
+                'label' => __('Pending', 'ifthenpay-payments-for-wpforms'),
+                'placeholder' => __("We're waiting for your payment to be confirmed. You don't need to do anything else — this will update automatically once it's complete.", 'ifthenpay-payments-for-wpforms'),
+            ],
+            'failed' => [
+                'label' => __('Failed', 'ifthenpay-payments-for-wpforms'),
+                'placeholder' => __('Your payment could not be completed.', 'ifthenpay-payments-for-wpforms'),
+            ],
+            'cancelled' => [
+                'label' => __('Cancelled', 'ifthenpay-payments-for-wpforms'),
+                'placeholder' => __('You cancelled the payment.', 'ifthenpay-payments-for-wpforms'),
+            ],
+        ];
+    }
+
+    /**
+     * Renders the popup confirmation messages section: a per-form, per-outcome
+     * confirmation for this plugin's own popup (see assets/js/frontend.js
+     * showOutcomeNotice()) — separate from, and not affected by, WPForms' native
+     * Confirmations tab. A single row of tabs (Paid/Pending/Failed/Cancelled) with one
+     * shared content area below showing only the active tab's fields — see
+     * admin.js activateConfirmationTab().
+     *
+     * @param array<string, array<string, string>> $confirmations
+     */
+    private function render_confirmation_messages(array $confirmations): string
+    {
+        $meta = $this->confirmation_status_meta();
+        $statuses = array_keys($meta);
+        $defaultStatus = esc_attr((string) ($statuses[0] ?? 'paid'));
+
+        $html = '<div id="iftp-pbl-confirmations-section" class="iftp-pbl-confirmations-section" data-default-status="' . $defaultStatus . '" style="margin-top:16px;">'
+            . '<div style="margin-bottom:8px;font-weight:600;font-size:13px;">' . esc_html__('Popup Confirmation Messages', 'ifthenpay-payments-for-wpforms') . '</div>'
+            . '<p class="description">' . esc_html__('Customize what customers see in the ifthenpay payment popup for each outcome, pre-filled with the default text below. This is separate from the WPForms Confirmations tab, which does not apply to this popup.', 'ifthenpay-payments-for-wpforms') . '</p>'
+            . '<div class="iftp-pbl-confirmations-tabs" role="tablist">';
+
+        foreach ($meta as $status => $statusMeta) {
+            $html .= $this->render_confirmation_tab_button($status, $statusMeta);
+        }
+
+        $html .= '</div><div class="iftp-pbl-confirmations-panels">';
+
+        foreach ($meta as $status => $statusMeta) {
+            $entry = isset($confirmations[$status]) && is_array($confirmations[$status]) ? $confirmations[$status] : [];
+            $html .= $this->render_confirmation_panel($status, $statusMeta, $entry);
+        }
+
+        return $html . '</div></div>';
+    }
+
+    /**
+     * @param array<string, string> $meta
+     */
+    private function render_confirmation_tab_button(string $status, array $meta): string
+    {
+        return '<button type="button" class="iftp-pbl-confirmations-tab" data-status="' . esc_attr($status) . '" role="tab" aria-selected="false">'
+            . '<span class="iftp-pbl-confirmations-tab-label">' . esc_html($meta['label']) . '</span>'
+            . '<span class="iftp-pbl-confirmations-tab-icon" aria-hidden="true">'
+            . '<svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            . '</span>'
+            . '</button>';
+    }
+
+    /**
+     * @param array<string, string> $meta
+     * @param array<string, string> $entry
+     */
+    private function render_confirmation_panel(string $status, array $meta, array $entry): string
+    {
+        $slug = esc_attr($this->slug);
+        $statusAttr = esc_attr($status);
+        $canRedirect = in_array($status, self::CONFIRMATION_REDIRECTABLE_STATUSES, true);
+        $type = $canRedirect && in_array($entry['type'] ?? '', self::CONFIRMATION_TYPES, true) ? (string) $entry['type'] : 'message';
+
+        // Every panel starts visible in the markup (not just the active tab's) — the
+        // message field below is a real TinyMCE editor, which renders broken (zero
+        // width/height) if initialized while its container is display:none. admin.js
+        // switches into actual tab mode (hiding every panel but the active one)
+        // immediately after TinyMCE has finished initializing all of them (see
+        // initConfirmationTabs() there), so there's no broken editor to ever see.
+        $html = '<div class="iftp-pbl-confirmations-panel" data-status="' . $statusAttr . '">';
+
+        if ($canRedirect) {
+            $typeId = 'iftp_pbl_confirmations_' . $status . '_type';
+
+            $html .= '<div class="wpforms-panel-field wpforms-panel-field-select iftp-pbl-tight-field">'
+                . '<label for="' . esc_attr($typeId) . '">' . esc_html__('Confirmation Type', 'ifthenpay-payments-for-wpforms') . '</label>'
+                . '<select id="' . esc_attr($typeId) . '" name="payments[' . $slug . '][confirmations][' . $statusAttr . '][type]" class="wpforms-panel-field-confirmations-type">'
+                . '<option value="message" ' . selected($type, 'message', false) . '>' . esc_html__('Message', 'ifthenpay-payments-for-wpforms') . '</option>'
+                . '<option value="page" ' . selected($type, 'page', false) . '>' . esc_html__('Show Page', 'ifthenpay-payments-for-wpforms') . '</option>'
+                . '<option value="redirect" ' . selected($type, 'redirect', false) . '>' . esc_html__('Go to URL (Redirect)', 'ifthenpay-payments-for-wpforms') . '</option>'
+                . '</select></div>';
+        }
+
+        $html .= $this->render_confirmation_message_field($status, $meta, $entry, $canRedirect, $type === 'message' ? '' : 'display:none;');
+
+        if ($status === 'paid') {
+            $html .= $this->render_confirmation_entry_preview_toggle($entry, $type === 'message' ? '' : 'display:none;');
+        }
+
+        if ($canRedirect) {
+            $html .= $this->render_confirmation_page_field($status, $entry, $type === 'page' ? '' : 'display:none;');
+            $html .= $this->render_confirmation_redirect_field($status, $entry, $type === 'redirect' ? '' : 'display:none;');
+        }
+
+        return $html . '</div>';
+    }
+
+    /**
+     * @param array<string, string> $meta
+     * @param array<string, string> $entry
+     */
+    private function render_confirmation_message_field(string $status, array $meta, array $entry, bool $canRedirect, string $hiddenStyle): string
+    {
+        $slug = esc_attr($this->slug);
+        $fieldId = 'iftp_pbl_confirmations_' . $status . '_message';
+        // "Confirmation Message" only makes sense where it's disambiguating from the
+        // Page/Redirect options next to it (paid/pending); cancelled/failed only ever have
+        // a message, so the qualifier is just noise there.
+        $label = $canRedirect
+            ? __('Confirmation Message', 'ifthenpay-payments-for-wpforms')
+            : __('Message', 'ifthenpay-payments-for-wpforms');
+        // Pre-filled with the plugin's own default text rather than left blank — an admin
+        // starts from working copy to edit, not a blank box guessing what the fallback
+        // says. Still falls back to the same global default on the frontend (see
+        // Field::build_confirmation_overrides()) if a field is ever cleared entirely.
+        $message = (string) ($entry['message'] ?? '');
+        if ($message === '') {
+            $message = $meta['placeholder'];
+        }
+
+        return '<div class="wpforms-panel-field wpforms-panel-field-tinymce wpforms-panel-field-textarea iftp-pbl-tight-field" style="margin-top:10px;' . esc_attr($hiddenStyle) . '">'
+            . '<label for="' . esc_attr($fieldId) . '">' . esc_html($label) . '</label>'
+            . '<textarea id="' . esc_attr($fieldId) . '" name="payments[' . $slug . '][confirmations][' . esc_attr($status) . '][message]" rows="5" class="wpforms-panel-field-confirmations-message">' . esc_textarea($message) . '</textarea>'
+            . '</div>';
+    }
+
+    /**
+     * @param array<string, string> $entry
+     */
+    private function render_confirmation_entry_preview_toggle(array $entry, string $hiddenStyle): string
+    {
+        $slug = esc_attr($this->slug);
+        $entryPreviewId = 'iftp_pbl_confirmations_paid_entry_preview';
+        $entryPreviewEnabled = !empty($entry['entry_preview']);
+
+        return '<div class="wpforms-panel-field wpforms-panel-field-toggle iftp-pbl-confirmations-entry-preview-field" style="margin-top:10px;' . esc_attr($hiddenStyle) . '">'
+            . '<span class="wpforms-toggle-control">'
+            . '<input type="checkbox" id="' . esc_attr($entryPreviewId) . '" name="payments[' . $slug . '][confirmations][paid][entry_preview]" value="1" ' . checked($entryPreviewEnabled, true, false) . '>'
+            . '<label class="wpforms-toggle-control-icon" for="' . esc_attr($entryPreviewId) . '"></label>'
+            . '<label for="' . esc_attr($entryPreviewId) . '" class="wpforms-toggle-control-label">' . esc_html__('Show entry preview after confirmation message', 'ifthenpay-payments-for-wpforms') . '</label>'
+            . '</span></div>';
+    }
+
+    /**
+     * @param array<string, string> $entry
+     */
+    private function render_confirmation_page_field(string $status, array $entry, string $hiddenStyle): string
+    {
+        $fieldId = 'iftp_pbl_confirmations_' . $status . '_page';
+        $pageId = absint($entry['page'] ?? 0);
+
+        $select = wp_dropdown_pages([
+            'name' => 'payments[' . $this->slug . '][confirmations][' . $status . '][page]',
+            'id' => $fieldId,
+            'selected' => $pageId,
+            'show_option_none' => __('— Select a page —', 'ifthenpay-payments-for-wpforms'),
+            'option_none_value' => '0',
+            'class' => 'wpforms-panel-field-confirmations-page',
+            'echo' => 0,
+        ]);
+
+        return '<div class="wpforms-panel-field wpforms-panel-field-select iftp-pbl-tight-field" style="margin-top:10px;' . esc_attr($hiddenStyle) . '">'
+            . '<label for="' . esc_attr($fieldId) . '">' . esc_html__('Confirmation Page', 'ifthenpay-payments-for-wpforms') . '</label>'
+            . (string) $select
+            . '</div>';
+    }
+
+    /**
+     * @param array<string, string> $entry
+     */
+    private function render_confirmation_redirect_field(string $status, array $entry, string $hiddenStyle): string
+    {
+        $slug = esc_attr($this->slug);
+        $fieldId = 'iftp_pbl_confirmations_' . $status . '_redirect';
+        $redirect = (string) ($entry['redirect'] ?? '');
+
+        return '<div class="wpforms-panel-field wpforms-panel-field-text iftp-pbl-tight-field" style="margin-top:10px;' . esc_attr($hiddenStyle) . '">'
+            . '<label for="' . esc_attr($fieldId) . '">' . esc_html__('Confirmation Redirect URL', 'ifthenpay-payments-for-wpforms') . ' <span class="required">*</span></label>'
+            . '<input type="text" id="' . esc_attr($fieldId) . '" name="payments[' . $slug . '][confirmations][' . esc_attr($status) . '][redirect]" value="' . esc_attr($redirect) . '" class="wpforms-panel-field-confirmations-redirect widefat">'
+            . '</div>';
     }
 
     private function fetch_and_cache_api_data(): void
@@ -931,6 +1181,21 @@ class Payments
     private function icon(): string
     {
         return IFTP_PBL_URL . 'assets/images/icon.svg';
+    }
+
+    /**
+     * Busts the browser cache on every edit to this specific builder asset, rather than
+     * IFTP_PBL_VERSION — a fixed release-version string other code also reports as-is
+     * (e.g. the activation email in ajax_activate_payment_method()), so it can't be bumped
+     * just to force a fresh request here. Falls back to IFTP_PBL_VERSION only if the file
+     * is somehow missing.
+     */
+    private function asset_version(string $relativePath): string
+    {
+        $path = IFTP_PBL_DIR . $relativePath;
+        $mtime = file_exists($path) ? filemtime($path) : false;
+
+        return $mtime !== false ? (string) $mtime : IFTP_PBL_VERSION;
     }
 
     /**
