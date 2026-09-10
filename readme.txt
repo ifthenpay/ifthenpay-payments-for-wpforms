@@ -122,9 +122,8 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 8. (Admin Only) Payment Entries
 
 == Changelog ==
-
-= 1.0.0 =
-* Initial release: WPForms integration, ifthenpay payments, multi-method support, modal.
+= 2.0.1 =
+*Fixed: Sanitization function bug on the callback url.*
 
 = 2.0.0 =
 *Added: full webhook (callback) support — ifthenpay now notifies the site directly when a payment resolves, instead of relying on the customer's browser returning to the site.
@@ -140,19 +139,21 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 *Fixed: the payment outcome popup no longer reopens on its own after being dismissed, e.g. when switching back to the browser tab, unless the payment status actually changed.
 *Security: payment completion is now confirmed exclusively via the verified webhook, rather than trusting the customer's browser return.
 
-= 2.0.1 =
-*Fixed: Sanitization function bug on the callback url.*
+
+= 1.0.0 =
+* Initial release: WPForms integration, ifthenpay payments, multi-method support, modal.
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-Initial release. Review gateway settings payments before going live.
+= 2.0.1 =
+This version fixes the callback url bug from version 2.0.0.
 
 = 2.0.0 =
 This version adds Webhooks and fixes a bug where 0-quantity products added to the total value. Upgrade immediately.
 
-= 2.0.1 =
-This version fixes the callback url bug from version 2.0.0.
+
+= 1.0.0 =
+Initial release. Review gateway settings payments before going live.
 
 == License ==
 This plugin is licensed under the GPLv3.
