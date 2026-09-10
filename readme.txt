@@ -127,12 +127,21 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 * Initial release: WPForms integration, ifthenpay payments, multi-method support, modal.
 
 = 2.0.0 =
-*Version 2.0.0: WPForms integration now has WEBHOOKS(CALLBACKS).
-*Security: payment completion is now confirmed exclusively via the verified webhook.
-*Removed unused transaction ID tracking and the legacy modal/popup payment display; payments now use a full-page redirect to ifthenpay's hosted page.
-*Fixed: the payment outcome popup no longer reopens on its own after being dismissed, e.g. when switching back to the browser tab, unless the payment status actually changed.
+*Added: full webhook (callback) support — ifthenpay now notifies the site directly when a payment resolves, instead of relying on the customer's browser returning to the site.
+*Added: customizable Popup Confirmation Messages per payment outcome (Paid, Pending, Failed, Cancelled), configurable per form in the Payments tab. For the Paid outcome, choose a Confirmation Type — show a message in the popup, redirect to a WPForms page, or redirect to a custom URL — plus an optional entry preview shown after the message.
+*Added: two ready-made ifthenpay form templates (Simple and multi-page Complex), available from Add New Form with branded thumbnails.
+*Added: an "ifthenpay" light/dark theme preset selectable from WPForms' Themes tab.
+*Added: a daily cron that automatically expires stale "pending" payments left behind by abandoned or timed-out Pay By Link sessions.
+*Changed: payments now use a full-page redirect to ifthenpay's hosted payment page instead of the legacy modal/popup display; the unused transaction ID tracking that display relied on was removed.
 *Changed: when another WPForms payment gateway field (PayPal, Stripe, Square, Authorize.Net) is active on the form, the ifthenpay field now hides itself instead of showing a warning message.
-*Added: customizable Popup Confirmation Messages per payment outcome (Paid, Pending, Failed, Cancelled), with an optional page/URL redirect and entry preview for the Paid outcome, configurable per form in the Payments tab.
+*Changed: a saved default payment method is now ignored if it's no longer enabled on the gateway, falling back to an available method instead of keeping a stale default.
+*Fixed: a real, non-zero order could be rejected with "Amount cannot be lower than 0" — a stray or empty submitted quantity for a field that doesn't actually support quantities (e.g. a payment checkbox) was being trusted and could zero out the total. Quantity is now only read from fields that have quantity enabled, matching WPForms' own core logic.
+*Fixed: pending, cancelled, and failed Pay By Link attempts now create a real WPForms entry and payment record (previously only completed payments did), so they show up correctly in Payments and Entries.
+*Fixed: the payment outcome popup no longer reopens on its own after being dismissed, e.g. when switching back to the browser tab, unless the payment status actually changed.
+*Security: payment completion is now confirmed exclusively via the verified webhook, rather than trusting the customer's browser return.
+
+= 2.0.1 =
+*Fixed: Sanitization function bug on the callback url.*
 
 == Upgrade Notice ==
 
@@ -140,7 +149,10 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 Initial release. Review gateway settings payments before going live.
 
 = 2.0.0 =
-Update to Version 2.0.0 to utilize WEBHOOKS(CALLBACKS).
+This version adds Webhooks and fixes a bug where 0-quantity products added to the total value. Upgrade immediately.
+
+= 2.0.1 =
+This version fixes the callback url bug from version 2.0.0.
 
 == License ==
 This plugin is licensed under the GPLv3.

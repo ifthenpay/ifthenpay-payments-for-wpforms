@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format loosely follows Keep a Changelog recommendations.
 
-## [2.0.0] - 2026-09-07
+## [2.0.1] - 2026-09-10
+
+### Fixed
+- Sanitization function bug on the callback url.
+
+## [2.0.0] - 2026-09-09
 
 ### Added
 

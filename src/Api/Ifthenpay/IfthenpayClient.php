@@ -226,7 +226,12 @@ final class IfthenpayClient {
 	 */
 	public static function activate_callback(string $gateway_key, string $callback_url): bool {
 		$gateway_key  = sanitize_text_field($gateway_key);
-		$callback_url = esc_url_raw($callback_url);
+		$callback_url_parts = explode( '?', $callback_url, 2 );
+		$callback_url        = esc_url_raw( $callback_url_parts[0] );
+
+		if ( isset( $callback_url_parts[1] ) ) {
+			$callback_url .= '?' . $callback_url_parts[1];
+		}
 
 		if ($gateway_key === '' || $callback_url === '') {
 			return false;

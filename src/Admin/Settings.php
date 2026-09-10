@@ -129,7 +129,7 @@ class Settings
 
     public function enqueue_assets(): void
     {
-        wp_register_style('ifthenpay-wpforms-admin', false, [], defined('IFTP_PBL_VERSION') ? IFTP_PBL_VERSION : '2.0.0');
+        wp_register_style('ifthenpay-wpforms-admin', false, [], defined('IFTP_PBL_VERSION') ? IFTP_PBL_VERSION : '2.0.1');
         wp_enqueue_style('ifthenpay-wpforms-admin');
         wp_add_inline_style('ifthenpay-wpforms-admin', $this->inline_css());
 
