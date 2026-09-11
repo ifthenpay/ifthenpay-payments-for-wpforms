@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Plugin Name: 		ifthenpay | Payments for WPForms
  * Plugin URI:        	https://github.com/ifthenpay/ifthenpay-payments-for-wpforms
  * Description: 		ifthenpay Pay by Link integration for WPForms.
- * Version: 			2.0.2
+ * Version: 			2.0.3
  * Tested up to:        7.1
  * Requires at least: 	6.5
  * Requires PHP:        8.2
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'IFTP_PBL_VERSION', '2.0.2' );
+define( 'IFTP_PBL_VERSION', '2.0.3' );
 define( 'IFTP_PBL_FILE', __FILE__ );
 define( 'IFTP_PBL_DIR', plugin_dir_path( __FILE__ ) );
 define( 'IFTP_PBL_URL', plugin_dir_url( __FILE__ ) );

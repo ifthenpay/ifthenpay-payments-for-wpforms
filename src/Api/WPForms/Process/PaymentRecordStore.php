@@ -118,9 +118,11 @@ class PaymentRecordStore
 			// away from that status again. A cancelled or failed attempt is deliberately NOT
 			// terminal the same way: a Multibanco/Payshop reference (or any method the customer
 			// abandoned in the browser without fully reversing) can still genuinely get paid
-			// later, and the authoritative signal for that — WebhookHandler::handle_webhook_success(),
-			// which verifies ifthenpay's own anti-phishing key and the paid amount — must still be
-			// able to mark it completed even though it was previously cancelled/failed.
+			// later, and the authoritative signals for that — WebhookHandler::handle_webhook_success()
+			// (ifthenpay's asynchronous webhook, verified via its anti-phishing key and the paid
+			// amount) and WebhookHandler::confirm_via_transaction_status() (a synchronous fast path
+			// verified via ifthenpay's own transaction-status API) — must still be able to mark it
+			// completed even though it was previously cancelled/failed.
 			if ( $status !== 'completed' && $payment_handler && method_exists( $payment_handler, 'get' ) ) {
 				$current = $payment_handler->get( $payment_id, array( 'cap' => false ) );
 				if ( $current && isset( $current->status ) && (string) $current->status === 'completed' ) {

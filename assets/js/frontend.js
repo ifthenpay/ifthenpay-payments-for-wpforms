@@ -68,6 +68,7 @@
 		'brand',
 		'pan',
 		'lang',
+		'transaction_id',
 	];
 
 	// Field types allowed alongside an ifthenpay field (do not count as competing gateways).
@@ -395,13 +396,23 @@
 				'iftp_payment_id'
 			);
 
+			// Only present on a genuine "success" return (see
+			// IfthenpayPayload::build_gateway_urls()'s [TRANSACTIONID] placeholder) — lets the
+			// server resolve the payment immediately via ifthenpay's own transaction-status API
+			// instead of waiting on its asynchronous webhook (see verifyPaymentReturn() and
+			// Process::ajax_verify_payment()).
+			const transactionId = getUrlSearchParam(
+				window.location.href,
+				'transaction_id'
+			);
+
 			this.stripReturnParamsFromUrl();
 
 			if (!paymentId) {
 				return;
 			}
 
-			this.reportOutcomeAndClose(status, paymentId);
+			this.reportOutcomeAndClose(status, paymentId, transactionId);
 		}
 
 		/**
@@ -417,57 +428,80 @@
 		 * reopened by hand) — window.close() silently no-ops there instead, and this page
 		 * is still around a moment later to show the outcome itself.
 		 */
-		reportOutcomeAndClose(status, paymentId) {
-			this.verifyPaymentReturn(status, paymentId, (ok, data) => {
-				const resolvedStatus = String(
-					data.status || (ok ? 'completed' : 'pending')
-				);
-
-				if (window.opener) {
-					try {
-						window.opener.postMessage(
-							{
-								iftpPblOutcome: true,
-								paymentId: String(paymentId),
-								status: resolvedStatus,
-								entryPreviewHtml: data.entry_preview_html || '',
-							},
-							window.location.origin
-						);
-					} catch (e) {
-						// window.opener existed but scripting into it is blocked (e.g. a
-						// cross-origin-opener-policy boundary crossed while this tab was on
-						// ifthenpay's own domain) — the original tab's own fallback polling
-						// (watchExternalPayment()) will still pick this outcome up on its
-						// next tick regardless.
-					}
-				}
-
-				window.close();
-
-				window.setTimeout(() => {
-					if (document.hidden) {
-						return;
-					}
-
-					// Still here — window.close() only works on a script-opened tab, so this
-					// wasn't reached through our own flow. Show the outcome here instead of
-					// leaving the customer looking at a bare, unexplained page.
-					const $field = $('.iftp-pbl-live-field').first();
-					if (!$field.length) {
-						return;
-					}
-					const $button = $field
-						.find('.iftp-pbl-pay-now-button')
-						.first();
-					$button.prop('disabled', resolvedStatus === 'completed');
-					this.showOutcomeNotice(
-						resolvedStatus,
-						$field,
-						data.entry_preview_html
+		reportOutcomeAndClose(status, paymentId, transactionId) {
+			// Show the processing state immediately while the server performs its
+			// server-to-server verification. The verification response below remains
+			// the only source that can resolve this attempt as paid.
+			if (status === 'success' && window.opener) {
+				try {
+					window.opener.postMessage(
+						{
+							iftpPblOutcome: true,
+							paymentId: String(paymentId),
+							status: 'pending',
+						},
+						window.location.origin
 					);
-				}, 300);
-			});
+				} catch (e) {
+					// The original tab's polling remains the fallback if messaging is blocked.
+				}
+			}
+
+			this.verifyPaymentReturn(
+				status,
+				paymentId,
+				(ok, data) => {
+					const resolvedStatus = String(
+						data.status || (ok ? 'completed' : 'pending')
+					);
+
+					if (window.opener) {
+						try {
+							window.opener.postMessage(
+								{
+									iftpPblOutcome: true,
+									paymentId: String(paymentId),
+									status: resolvedStatus,
+									entryPreviewHtml: data.entry_preview_html || '',
+								},
+								window.location.origin
+							);
+						} catch (e) {
+							// window.opener existed but scripting into it is blocked (e.g. a
+							// cross-origin-opener-policy boundary crossed while this tab was on
+							// ifthenpay's own domain) — the original tab's own fallback polling
+							// (watchExternalPayment()) will still pick this outcome up on its
+							// next tick regardless.
+						}
+					}
+
+					window.close();
+
+					window.setTimeout(() => {
+						if (document.hidden) {
+							return;
+						}
+
+						// Still here — window.close() only works on a script-opened tab, so this
+						// wasn't reached through our own flow. Show the outcome here instead of
+						// leaving the customer looking at a bare, unexplained page.
+						const $field = $('.iftp-pbl-live-field').first();
+						if (!$field.length) {
+							return;
+						}
+						const $button = $field
+							.find('.iftp-pbl-pay-now-button')
+							.first();
+						$button.prop('disabled', resolvedStatus === 'completed');
+						this.showOutcomeNotice(
+							resolvedStatus,
+							$field,
+							data.entry_preview_html
+						);
+					}, 300);
+				},
+				transactionId
+			);
 		}
 
 		stripReturnParamsFromUrl() {
@@ -1135,6 +1169,16 @@
 				return;
 			}
 
+			if (String(payload.status || '') === 'pending') {
+				this.closeOverlay();
+				this.showOutcomeNotice(
+					'pending',
+					this.activePaymentContext.$field,
+					payload.entryPreviewHtml || ''
+				);
+				return;
+			}
+
 			this.resolveExternalPayment(
 				String(payload.status || 'pending'),
 				payload.entryPreviewHtml
@@ -1213,10 +1257,25 @@
 		 * this page. Re-plays the "closing" animation and swaps the popup to the paid
 		 * outcome the moment that happens; otherwise just keeps checking until attempts run
 		 * out.
+		 *
+		 * The same cadence applies regardless of payment method: a transaction id received on
+		 * return is already checked once, immediately and independently of this polling loop
+		 * (see Process::ajax_verify_payment()'s 'success' branch, which calls
+		 * WebhookHandler::confirm_via_transaction_status() before this loop's first tick even
+		 * runs) — so by the time this is reached, that quick path has already had its shot and
+		 * come up empty (still pending), and there's no reliable signal left to say a specific
+		 * payment is any more or less likely to resolve soon. Polling faster for everyone for a
+		 * short window costs little and catches most remaining cases (e.g. the webhook landing
+		 * moments later); after that, back off to a steadier cadence for the long tail (e.g. a
+		 * Multibanco/Payshop reference that can stay genuinely pending for days).
 		 */
 		watchForLateCompletion($field, $button, $form, paymentId, attempt) {
+			const fastAttempts = 10;
+			const fastIntervalMs = 3000;
 			const maxAttempts = 60;
-			const intervalMs = 20000;
+			const slowIntervalMs = 10000;
+
+			const intervalMs = attempt < fastAttempts ? fastIntervalMs : slowIntervalMs;
 
 			window.setTimeout(() => {
 				this.verifyPaymentReturn('poll', paymentId, (ok, data) => {
@@ -1294,11 +1353,21 @@
 			}, 320);
 		}
 
-		verifyPaymentReturn(status, paymentId, callback = () => {}) {
-			apiPost('iftp_pbl_verify_payment', {
+		verifyPaymentReturn(status, paymentId, callback = () => {}, transactionId = '') {
+			const payload = {
 				payment_id: paymentId,
 				return_action: status,
-			})
+			};
+
+			// Only ever present on a genuine "success" return (see handleGatewayReturn()) — lets
+			// the server resolve the payment immediately via ifthenpay's own transaction-status
+			// API instead of waiting on its asynchronous webhook (see
+			// WebhookHandler::confirm_via_transaction_status()).
+			if (transactionId) {
+				payload.transaction_id = transactionId;
+			}
+
+			apiPost('iftp_pbl_verify_payment', payload)
 				.done((response) => {
 					const data = response?.data ?? {};
 					const ok =

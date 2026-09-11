@@ -366,6 +366,50 @@ class EntryManager
 	}
 
 	/**
+	 * Leave a note on the entry as soon as a transaction id is received from the browser on
+	 * return from ifthenpay (see Process::record_received_transaction_id()) — before it's known
+	 * whether WebhookHandler::confirm_via_transaction_status() can actually confirm the payment
+	 * with it. Deliberately doesn't claim any outcome ("Paid" or otherwise): that's still added
+	 * separately, only once confirmed, by add_ifthenpay_request_id_note() below. This note exists
+	 * so the id is visible on the entry even when confirmation fails or only lands later via the
+	 * webhook — otherwise a transaction id that never confirmed left no trace at all.
+	 */
+	public function add_ifthenpay_transaction_id_received_note( int $payment_id, string $transaction_id ): void {
+		if ( $transaction_id === '' || ! function_exists( 'wpforms' ) ) {
+			return;
+		}
+
+		$entry_meta = wpforms()->obj( 'entry_meta' );
+		if ( ! $entry_meta || ! method_exists( $entry_meta, 'add' ) ) {
+			return;
+		}
+
+		$payment  = wpforms()->obj( 'payment' )->get( $payment_id, array( 'cap' => false ) );
+		$entry_id = $payment && ! empty( $payment->entry_id ) ? (int) $payment->entry_id : 0;
+
+		if ( $entry_id <= 0 ) {
+			return;
+		}
+
+		$note = sprintf(
+			/* translators: %s: ifthenpay transaction id. */
+			__( 'ifthenpay transaction ID received: %s (verifying payment status)', 'ifthenpay-payments-for-wpforms' ),
+			$transaction_id
+		);
+
+		$entry_meta->add(
+			[
+				'entry_id' => $entry_id,
+				'form_id'  => isset( $payment->form_id ) ? (int) $payment->form_id : 0,
+				'user_id'  => 0,
+				'type'     => 'note',
+				'data'     => wpautop( esc_html( $note ) ),
+			],
+			'entry_meta'
+		);
+	}
+
+	/**
 	 * Leave a note on the entry with ifthenpay's own request id for this payment, once the
 	 * webhook has confirmed it (see WebhookHandler::handle_webhook_success()) — a reference for
 	 * looking the payment up in ifthenpay's backoffice, distinct from the Pay by Link note added

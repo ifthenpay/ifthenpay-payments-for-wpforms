@@ -4,7 +4,7 @@ Tags: ifthenpay, wpforms, payments, ifthen, gateway
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,9 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 8. (Admin Only) Payment Entries
 
 == Changelog ==
+= 2.0.3 =
+*Fixed: optimize payment confirmation speed on frontend and improve server-side transaction tracking.*
+
 = 2.0.2 =
 *Fixed: plugin version metadata (Stable tag, plugin header) was not bumped for the 2.0.1 release; this maintenance release corrects it and re-syncs the WordPress.org listing.*
 
@@ -142,11 +145,13 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 *Fixed: the payment outcome popup no longer reopens on its own after being dismissed, e.g. when switching back to the browser tab, unless the payment status actually changed.
 *Security: payment completion is now confirmed exclusively via the verified webhook, rather than trusting the customer's browser return.
 
-
 = 1.0.0 =
 * Initial release: WPForms integration, ifthenpay payments, multi-method support, modal.
 
 == Upgrade Notice ==
+
+= 2.0.3 =
+Update for the optimized optimize payment server-side transaction tracking.
 
 = 2.0.2 =
 Maintenance release correcting version metadata from 2.0.1. No functional changes.

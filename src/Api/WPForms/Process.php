@@ -32,6 +32,7 @@ class Process
 	private PaymentRecordStore $paymentRecordStore;
 	private WebhookContextStore $webhookContextStore;
 	private EntryManager $entryManager;
+	private WebhookHandler $webhookHandler;
 
 	public function __construct(
 		private string $slug,
@@ -39,9 +40,9 @@ class Process
 		$this->paymentRecordStore  = new PaymentRecordStore( $slug );
 		$this->webhookContextStore = new WebhookContextStore();
 		$this->entryManager        = new EntryManager( $this->webhookContextStore );
+		$this->webhookHandler       = new WebhookHandler( $this->paymentRecordStore, $this->entryManager, $this->webhookContextStore );
 
 		$paymentDataPreparer = new PaymentDataPreparer( $this->paymentRecordStore, $this->entryManager );
-		$webhookHandler       = new WebhookHandler( $this->paymentRecordStore, $this->entryManager, $this->webhookContextStore );
 
 		add_filter('wpforms_forms_submission_prepare_payment_data', [$paymentDataPreparer, 'prepare_payment_data'], 10, 3);
 		add_filter('wpforms_forms_submission_prepare_payment_meta', [$paymentDataPreparer, 'prepare_payment_meta'], 10, 3);
@@ -49,7 +50,7 @@ class Process
 		add_action('wpforms_process_payment_saved', [$paymentDataPreparer, 'payment_saved_process'], 10, 3);
 		add_action('wpforms_process_entry_saved', [$paymentDataPreparer, 'entry_saved_process'], 10, 5);
 		add_action('wpforms_process_complete', [$paymentDataPreparer, 'payment_confirmation_process'], 10, 4);
-		add_action('init', [$webhookHandler, 'handle_ifthenpay_webhook']);
+		add_action('init', [$this->webhookHandler, 'handle_ifthenpay_webhook']);
 	}
 
 	/**
@@ -320,12 +321,15 @@ class Process
 	 * unsigned query string — nothing here is signed or verified by ifthenpay, so anyone can
 	 * forge an identical POST straight to admin-ajax.php (this endpoint is necessarily
 	 * `nopriv`, and its nonce is only tied to viewing the form, not to a specific payment).
-	 * This method therefore never mutates a payment to "completed"; on a "success" return it
-	 * only reports the payment's real, current status. WebhookHandler::handle_webhook_success()
-	 * — which independently verifies the payment server-to-server with ifthenpay's
-	 * anti-phishing key and amount — is the only place that may ever mark a payment
-	 * "completed". Until that webhook fires, the status here stays "pending" and the frontend
-	 * keeps polling (see pollPaymentOutcome() in frontend.js).
+	 * This method therefore never mutates a payment to "completed" from the client-POSTed
+	 * status/params themselves. A "success" return carrying a transaction_id (see
+	 * IfthenpayPayload::build_gateway_urls()'s [TRANSACTIONID] placeholder) does get a chance to
+	 * resolve the payment right here, via WebhookHandler::confirm_via_transaction_status() —
+	 * but that method independently re-verifies the payment server-to-server against ifthenpay's
+	 * own API before it may mark anything "completed", exactly like
+	 * WebhookHandler::handle_webhook_success() does for the asynchronous merchant-notification
+	 * webhook. Until one of those two succeeds, the status here stays "pending" and the frontend
+	 * keeps polling (see watchExternalPayment() in frontend.js).
 	 */
 	public function ajax_verify_payment(): void {
 
@@ -360,10 +364,46 @@ class Process
 			$this->respond_with_status($payment_id, 'failed');
 		}
 
+		// A genuine "success" return usually carries the transaction id ifthenpay appended to
+		// success_url — try to resolve the payment immediately via ifthenpay's own transaction
+		// status API rather than waiting on its asynchronous webhook. See
+		// WebhookHandler::confirm_via_transaction_status()'s docblock for why a client-supplied
+		// transaction_id can't be used to fake a "completed" result.
+		if ($return_action === 'success') {
+			$transaction_id = isset($_POST['transaction_id']) ? sanitize_text_field(wp_unslash((string) $_POST['transaction_id'])) : '';
+			if ($transaction_id !== '') {
+				$this->record_received_transaction_id($payment_id, $transaction_id);
+				$this->webhookHandler->confirm_via_transaction_status($payment_id, $transaction_id);
+			}
+		}
+
 		// 'success' and the original tab's own background "poll" action alike only ever
 		// report the payment's real, current status — never mutate it to "completed" from
-		// client-POSTed data. See this method's docblock.
+		// client-POSTed data directly. See this method's docblock.
 		$this->respond_with_current_status($payment_id);
+	}
+
+	/**
+	 * Records the transaction id as soon as it's received from the browser — independent of
+	 * whether WebhookHandler::confirm_via_transaction_status() (called right after this) manages
+	 * to confirm the payment with it. Without this, a transaction id that arrives on a success
+	 * return but fails to confirm (e.g. ifthenpay's transaction-status API was transiently
+	 * unreachable, or the payment was still a Multibanco/Payshop reference at that point) was
+	 * never kept anywhere — it only ever reached storage/entry notes via
+	 * complete_confirmed_payment(), i.e. only once the payment was already known paid.
+	 *
+	 * Guarded against duplicate notes: a customer reloading the success return URL, or the
+	 * "poll" and "success" return_actions racing, can both deliver the same transaction id more
+	 * than once.
+	 */
+	private function record_received_transaction_id( int $payment_id, string $transaction_id ): void {
+		$summary = $this->paymentRecordStore->get_stored_payment_summary( $payment_id );
+		if ( isset( $summary['transaction_id'] ) && (string) $summary['transaction_id'] === $transaction_id ) {
+			return;
+		}
+
+		$this->paymentRecordStore->update_stored_payment_summary( $payment_id, [ 'transaction_id' => $transaction_id ] );
+		$this->entryManager->add_ifthenpay_transaction_id_received_note( $payment_id, $transaction_id );
 	}
 
 	/**

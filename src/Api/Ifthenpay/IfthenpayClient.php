@@ -263,6 +263,30 @@ final class IfthenpayClient {
 	}
 
 	/**
+	 * Look up a transaction's own recorded status directly, given the transaction id ifthenpay
+	 * hands back to the customer's browser on redirect (see
+	 * IfthenpayPayload::build_gateway_urls()'s success_url [TRANSACTIONID] placeholder). Lets
+	 * WebhookHandler::confirm_via_transaction_status() confirm a payment synchronously the
+	 * instant the browser returns, instead of only ever waiting on ifthenpay's asynchronous
+	 * merchant-notification webhook.
+	 *
+	 * @throws RuntimeException
+	 */
+	public static function get_transaction_status(string $transaction_id): array {
+		$transaction_id = trim(sanitize_text_field($transaction_id));
+		if ($transaction_id === '') {
+			return [];
+		}
+
+		$url = add_query_arg(
+			['transactionId' => $transaction_id],
+			self::API_BASE . '/gateway/transaction/status/get'
+		);
+
+		return self::request('GET', $url);
+	}
+
+	/**
 	 * Create Pay By Link.
 	 */
 	public static function create_payment_link(string $gateway_key, array $payload): array {

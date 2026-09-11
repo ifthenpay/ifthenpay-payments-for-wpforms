@@ -147,6 +147,7 @@ final class IfthenpayPayload {
 		'brand',
 		'pan',
 		'lang',
+		'transaction_id',
 	];
 
 	/**
@@ -158,9 +159,9 @@ final class IfthenpayPayload {
 		$base_url = remove_query_arg( self::RETURN_PARAM_KEYS, $base_url );
 
 		return [
-			'success_url'  => add_query_arg( [ 'wpforms_pay' => 'success', 'iftp_payment_id' => $payment_id, 'iftp_gateway' => 1 ], $base_url ),
-			'error_url'    => add_query_arg( [ 'wpforms_pay' => 'error',   'iftp_payment_id' => $payment_id, 'iftp_gateway' => 1 ], $base_url ),
-			'cancel_url'   => add_query_arg( [ 'wpforms_pay' => 'cancel',  'iftp_payment_id' => $payment_id, 'iftp_gateway' => 1 ], $base_url ),
+			'success_url'  => add_query_arg( [ 'wpforms_pay' => 'success', 'iftp_payment_id' => $payment_id,  'transaction_id' => '[TRANSACTIONID]', 'iftp_gateway' => 1 ], $base_url ),
+			'error_url'    => add_query_arg( [ 'wpforms_pay' => 'error',   'iftp_payment_id' => $payment_id,  'iftp_gateway' => 1 ], $base_url ),
+			'cancel_url'   => add_query_arg( [ 'wpforms_pay' => 'cancel',  'iftp_payment_id' => $payment_id,  'iftp_gateway' => 1 ], $base_url ),
 			'callback_url' => add_query_arg( [ self::CALLBACK_QUERY_VAR => self::callback_path_segment() ], home_url( '/' ) ),
 		];
 	}

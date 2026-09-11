@@ -4,11 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format loosely follows Keep a Changelog recommendations.
 
+## [2.0.3] - 2026-09-11
+
+### Fixed
+- Optimize payment confirmation speed on frontend and improve server-side transaction tracking
+
 ## [2.0.2] - 2026-09-10
 
 ### Fixed
-
-- Plugin version metadata (Stable tag, plugin header) was not bumped for the 2.0.1 release; this maintenance release corrects it and re-syncs the WordPress.org listing.
+- SVN Bug.
 
 ## [2.0.1] - 2026-09-10
 

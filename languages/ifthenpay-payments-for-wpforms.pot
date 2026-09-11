@@ -1,43 +1,16 @@
-# Copyright (C) 2026 ifthenpay
-# This file is distributed under the GPL v3.
+# Copyright (C) 2026 ifthenpay-payments-for-wpforms
+# This file is distributed under the same license as the ifthenpay-payments-for-wpforms package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ifthenpay | Payments for WPForms 2.0.0\n"
+"Project-Id-Version: ifthenpay-payments-for-wpforms 2.0.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ifthenpay-payments-for-wpforms\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2026-09-11 11:24:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-09T11:17:26+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: ifthenpay-payments-for-wpforms\n"
-
-#. Plugin Name of the plugin
-#: ifthenpay-payments-for-wpforms.php
-msgid "ifthenpay | Payments for WPForms"
-msgstr ""
-
-#. Plugin URI of the plugin
-#: ifthenpay-payments-for-wpforms.php
-msgid "https://github.com/ifthenpay/ifthenpay-payments-for-wpforms"
-msgstr ""
-
-#. Description of the plugin
-#: ifthenpay-payments-for-wpforms.php
-msgid "ifthenpay Pay by Link integration for WPForms."
-msgstr ""
-
-#. Author of the plugin
-#: ifthenpay-payments-for-wpforms.php
-msgid "ifthenpay"
-msgstr ""
-
-#. Author URI of the plugin
-#: ifthenpay-payments-for-wpforms.php
-msgid "https://ifthenpay.com/"
-msgstr ""
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: src/Admin/Settings.php:79
 msgid "Enable ifthenpay payments in the Payments tab first."
@@ -47,9 +20,7 @@ msgstr ""
 msgid "Connect your ifthenpay Backoffice Key in WPForms Settings > Payments first."
 msgstr ""
 
-#: src/Admin/Settings.php:87
-#: src/Api/WPForms/Payments.php:220
-#: src/Builder/Payments.php:214
+#: src/Admin/Settings.php:87 src/Api/WPForms/Payments.php:220 src/Builder/Payments.php:214
 msgid "Select an ifthenpay gateway key in the Payments tab first."
 msgstr ""
 
@@ -69,8 +40,7 @@ msgstr ""
 msgid "You do not have permission to connect ifthenpay."
 msgstr ""
 
-#: src/Admin/Settings.php:154
-#: src/Admin/Settings.php:301
+#: src/Admin/Settings.php:154 src/Admin/Settings.php:301
 msgid "Enter a valid Backoffice Key before connecting."
 msgstr ""
 
@@ -79,8 +49,8 @@ msgid "The Backoffice is invalid."
 msgstr ""
 
 #. translators: 1: support email link, 2: sign-up link
+
 #: src/Admin/Settings.php:171
-#, php-format
 msgid "No WPForms gateway found for this Backoffice Key. If you are an ifthenpay client, %1$s to request a WPForms context gateway. If you are not yet a client, %2$s."
 msgstr ""
 
@@ -104,8 +74,7 @@ msgstr ""
 msgid "ifthenpay Backoffice Key disconnected."
 msgstr ""
 
-#: src/Admin/Settings.php:224
-#: src/Plugin.php:205
+#: src/Admin/Settings.php:224 src/Plugin.php:205
 msgid "ifthenpay | Payment Gateway"
 msgstr ""
 
@@ -121,13 +90,11 @@ msgstr ""
 msgid "Enter your Backoffice Key and click Connect to load your WPForms gateways."
 msgstr ""
 
-#: src/Admin/Settings.php:260
-#: src/Admin/Settings.php:298
+#: src/Admin/Settings.php:260 src/Admin/Settings.php:298
 msgid "Disconnect"
 msgstr ""
 
-#: src/Admin/Settings.php:261
-#: src/Admin/Settings.php:296
+#: src/Admin/Settings.php:261 src/Admin/Settings.php:296
 msgid "Connect"
 msgstr ""
 
@@ -143,371 +110,285 @@ msgstr ""
 msgid "Connection request failed. Please try again."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:171
-#: src/Builder/Field.php:173
+#: src/Api/WPForms/Field.php:171 src/Builder/Field.php:173
 msgid "<p>ifthenpay account connection is required when using the ifthenpay field.</p><p>To proceed, please go to <strong>WPForms Settings » Payments » ifthenpay</strong> and connect your account.</p>"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:176
-#: src/Builder/Field.php:178
+#: src/Api/WPForms/Field.php:176 src/Builder/Field.php:178
 msgid "<p>{name} must be enabled in the Payments settings when using the field.</p><p>To proceed, please go to <strong>Payments Â» {name}</strong> and check <strong>Enable {name}</strong>.</p>"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:181
-#: src/Builder/Field.php:183
+#: src/Api/WPForms/Field.php:181 src/Builder/Field.php:183
 msgid "<p>{name} requires a gateway key to be selected.</p><p>To proceed, please go to <strong>Payments Â» {name}</strong> and choose a <strong>Gateway key</strong>.</p>"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:257
-#: src/Builder/Field.php:259
+#: src/Api/WPForms/Field.php:257 src/Builder/Field.php:259
 msgid "Label"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:259
-#: src/Builder/Field.php:261
+#: src/Api/WPForms/Field.php:259 src/Builder/Field.php:261
 msgid "Enter text for the form field label."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:265
-#: src/Builder/Field.php:267
+#: src/Api/WPForms/Field.php:265 src/Builder/Field.php:267
 msgid "Pay now button label"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:266
-#: src/Api/WPForms/Field.php:513
-#: src/Api/WPForms/Field.php:822
-#: src/Api/WPForms/Field.php:894
-#: src/Builder/Field.php:268
-#: src/Builder/Field.php:515
-#: src/Builder/Field.php:770
-#: src/Builder/Field.php:828
-#: src/Templates/ComplexFormTemplate.php:141
-#: src/Templates/ExampleFormTemplate.php:98
+#: src/Api/WPForms/Field.php:266 src/Api/WPForms/Field.php:513 src/Api/WPForms/Field.php:822 src/Api/WPForms/Field.php:894 src/Builder/Field.php:268 src/Builder/Field.php:515 src/Builder/Field.php:770 src/Builder/Field.php:828 src/Templates/ComplexFormTemplate.php:141 src/Templates/ExampleFormTemplate.php:98
 msgid "Pay now"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:267
-#: src/Builder/Field.php:269
+#: src/Api/WPForms/Field.php:267 src/Builder/Field.php:269
 msgid "Enter the label for the pay now button."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:279
-#: src/Builder/Field.php:281
+#: src/Api/WPForms/Field.php:279 src/Builder/Field.php:281
 msgid "Box size"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:282
-#: src/Builder/Field.php:284
+#: src/Api/WPForms/Field.php:282 src/Builder/Field.php:284
 msgid "Small"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:283
-#: src/Builder/Field.php:285
+#: src/Api/WPForms/Field.php:283 src/Builder/Field.php:285
 msgid "Medium"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:284
-#: src/Builder/Field.php:286
+#: src/Api/WPForms/Field.php:284 src/Builder/Field.php:286
 msgid "Large"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:286
-#: src/Builder/Field.php:288
+#: src/Api/WPForms/Field.php:286 src/Builder/Field.php:288
 msgid "Choose how wide the ifthenpay payment box appears."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:292
-#: src/Builder/Field.php:294
+#: src/Api/WPForms/Field.php:292 src/Builder/Field.php:294
 msgid "Public box CSS classes"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:294
-#: src/Builder/Field.php:296
+#: src/Api/WPForms/Field.php:294 src/Builder/Field.php:296
 msgid "Add one or more CSS classes to the public ifthenpay field box, separated by spaces."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:301
-#: src/Builder/Field.php:303
+#: src/Api/WPForms/Field.php:301 src/Builder/Field.php:303
 msgid "Public button CSS classes"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:303
-#: src/Builder/Field.php:305
+#: src/Api/WPForms/Field.php:303 src/Builder/Field.php:305
 msgid "Add one or more CSS classes to the public ifthenpay pay button, separated by spaces."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:310
-#: src/Builder/Field.php:312
+#: src/Api/WPForms/Field.php:310 src/Builder/Field.php:312
 msgid "Hide WPForms label"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:312
-#: src/Builder/Field.php:314
+#: src/Api/WPForms/Field.php:312 src/Builder/Field.php:314
 msgid "Hide the normal WPForms field label on the frontend."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:318
-#: src/Builder/Field.php:320
+#: src/Api/WPForms/Field.php:318 src/Builder/Field.php:320
 msgid "Hide ifthenpay logo"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:320
-#: src/Builder/Field.php:322
+#: src/Api/WPForms/Field.php:320 src/Builder/Field.php:322
 msgid "Hide the ifthenpay logo shown in the payment box."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:326
-#: src/Builder/Field.php:328
+#: src/Api/WPForms/Field.php:326 src/Builder/Field.php:328
 msgid "Show pay button only"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:328
-#: src/Builder/Field.php:330
+#: src/Api/WPForms/Field.php:328 src/Builder/Field.php:330
 msgid "Hide the payment methods box and show only the Pay now button."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:479
-#: src/Builder/Field.php:481
+#: src/Api/WPForms/Field.php:479 src/Builder/Field.php:481
 msgid "Label Hidden"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:480
-#: src/Builder/Field.php:482
+#: src/Api/WPForms/Field.php:480 src/Builder/Field.php:482
 msgid "Every field should have a descriptive label. You can hide the label from the Advanced tab."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:488
-#: src/Builder/Field.php:490
-#: src/Plugin.php:241
+#: src/Api/WPForms/Field.php:488 src/Builder/Field.php:490 src/Plugin.php:241
 msgid "Configuration Required"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:490
-#: src/Builder/Field.php:492
+#: src/Api/WPForms/Field.php:490 src/Builder/Field.php:492
 msgid "Connect your ifthenpay Backoffice Key in WPForms Settings » Payments » ifthenpay to use this field."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:542
-#: src/Api/WPForms/Field.php:911
-#: src/Builder/Field.php:543
-#: src/Builder/Field.php:845
+#: src/Api/WPForms/Field.php:542 src/Api/WPForms/Field.php:911 src/Builder/Field.php:543 src/Builder/Field.php:845
 msgid "Ifthenpay"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:633
-#: src/Builder/Field.php:581
+#: src/Api/WPForms/Field.php:633 src/Builder/Field.php:581
 msgid "This field is disabled because ifthenpay is turned off in the Payments tab for this form."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:636
-#: src/Builder/Field.php:584
+#: src/Api/WPForms/Field.php:636 src/Builder/Field.php:584
 msgid "This field is disabled because no gateway key is selected in the Payments tab."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:639
-#: src/Builder/Field.php:587
+#: src/Api/WPForms/Field.php:639 src/Builder/Field.php:587
 msgid "This field is disabled because no payment methods are enabled for the selected gateway."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:128
-#: src/Api/WPForms/Payments.php:1169
-#: src/Builder/Payments.php:123
-#: src/Builder/Payments.php:919
+#: src/Api/WPForms/Payments.php:128 src/Api/WPForms/Payments.php:1169 src/Builder/Payments.php:123 src/Builder/Payments.php:919
 msgid "Connect WPForms to ifthenpay."
 msgstr ""
 
 #. translators: %s - payment gateway name
-#: src/Api/WPForms/Payments.php:132
-#: src/Builder/Payments.php:127
-#, php-format
+
+#: src/Api/WPForms/Payments.php:132 src/Builder/Payments.php:127
 msgid "To use %s, first add the ifthenpay payment field to your form."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:135
-#: src/Api/WPForms/Payments.php:1177
-#: src/Builder/Payments.php:130
-#: src/Builder/Payments.php:927
+#: src/Api/WPForms/Payments.php:135 src/Api/WPForms/Payments.php:1177 src/Builder/Payments.php:130 src/Builder/Payments.php:927
 msgid "Learn more about ifthenpay | Payment Gateway."
 msgstr ""
 
 #. translators: %s - payment gateway name
-#: src/Api/WPForms/Payments.php:148
-#: src/Builder/Payments.php:143
-#, php-format
+
+#: src/Api/WPForms/Payments.php:148 src/Builder/Payments.php:143
 msgid "Enable %s"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:152
-#: src/Builder/Payments.php:147
+#: src/Api/WPForms/Payments.php:152 src/Builder/Payments.php:147
 msgid "Allow customers to pay through ifthenpay using this form."
 msgstr ""
 
 #. translators: %s - payment provider name
-#: src/Api/WPForms/Payments.php:158
-#: src/Builder/Payments.php:153
-#, php-format
+
+#: src/Api/WPForms/Payments.php:158 src/Builder/Payments.php:153
 msgid "Heads up! %s cannot be enabled yet."
 msgstr ""
 
 #. translators: %s - payment field that is causing a conflict with ifthenpay field
-#: src/Api/WPForms/Payments.php:165
-#: src/Builder/Payments.php:160
-#, php-format
+
+#: src/Api/WPForms/Payments.php:165 src/Builder/Payments.php:160
 msgid "This form contains another payment field or gateway field that conflicts with ifthenpay: %s."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:219
-#: src/Builder/Payments.php:213
+#: src/Api/WPForms/Payments.php:219 src/Builder/Payments.php:213
 msgid "Add the ifthenpay field to this form before enabling ifthenpay."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:221
-#: src/Builder/Payments.php:215
+#: src/Api/WPForms/Payments.php:221 src/Builder/Payments.php:215
 msgid "Sending activation request..."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:222
-#: src/Api/WPForms/Payments.php:348
-#: src/Builder/Payments.php:216
-#: src/Builder/Payments.php:342
+#: src/Api/WPForms/Payments.php:222 src/Api/WPForms/Payments.php:348 src/Builder/Payments.php:216 src/Builder/Payments.php:342
 msgid "Your activation request has been sent to support."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:223
-#: src/Api/WPForms/Payments.php:353
-#: src/Builder/Payments.php:217
-#: src/Builder/Payments.php:347
+#: src/Api/WPForms/Payments.php:223 src/Api/WPForms/Payments.php:353 src/Builder/Payments.php:217 src/Builder/Payments.php:347
 msgid "Failed to send the activation email. Please try again later."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:224
-#: src/Builder/Payments.php:218
+#: src/Api/WPForms/Payments.php:224 src/Builder/Payments.php:218
 msgid "Server error sending activation request."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:225
-#: src/Builder/Payments.php:219
+#: src/Api/WPForms/Payments.php:225 src/Builder/Payments.php:219
 msgid "Loading payment methods..."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:226
-#: src/Builder/Payments.php:220
+#: src/Api/WPForms/Payments.php:226 src/Builder/Payments.php:220
 msgid "Unable to load the payment methods for this gateway. Please try again."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:236
-#: src/Builder/Payments.php:230
+#: src/Api/WPForms/Payments.php:236 src/Builder/Payments.php:230
 msgid "You do not have permission to load ifthenpay gateway methods."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:240
-#: src/Builder/Payments.php:234
+#: src/Api/WPForms/Payments.php:240 src/Builder/Payments.php:234
 msgid "Gateway methods can only be loaded for a saved form that contains the ifthenpay field."
 msgstr ""
 
 #. translators: %s - human-readable time remaining
-#: src/Api/WPForms/Payments.php:249
-#: src/Builder/Payments.php:243
-#, php-format
+
+#: src/Api/WPForms/Payments.php:249 src/Builder/Payments.php:243
 msgid "Please wait %s before changing the gateway again."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:262
-#: src/Builder/Payments.php:256
+#: src/Api/WPForms/Payments.php:262 src/Builder/Payments.php:256
 msgid "Select a valid ifthenpay gateway key."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:267
-#: src/Builder/Payments.php:261
+#: src/Api/WPForms/Payments.php:267 src/Builder/Payments.php:261
 msgid "Unable to load this gateway configuration."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:307
-#: src/Builder/Payments.php:301
+#: src/Api/WPForms/Payments.php:307 src/Builder/Payments.php:301
 msgid "You do not have permission to activate payment methods."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:311
-#: src/Builder/Payments.php:305
+#: src/Api/WPForms/Payments.php:311 src/Builder/Payments.php:305
 msgid "Connect a valid Backoffice Key in WPForms Settings > Payments before activating payment methods."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:319
-#: src/Builder/Payments.php:313
+#: src/Api/WPForms/Payments.php:319 src/Builder/Payments.php:313
 msgid "Missing gateway, method, or Backoffice Key."
 msgstr ""
 
 #. translators: %s - cooldown time in human readable format
-#: src/Api/WPForms/Payments.php:326
-#: src/Builder/Payments.php:320
-#, php-format
+
+#: src/Api/WPForms/Payments.php:326 src/Builder/Payments.php:320
 msgid "Please wait %s before sending another activation request."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:613
-#: src/Builder/Payments.php:604
+#: src/Api/WPForms/Payments.php:613 src/Builder/Payments.php:604
 msgid "Payment Methods"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:616
-#: src/Builder/Payments.php:607
+#: src/Api/WPForms/Payments.php:616 src/Builder/Payments.php:607
 msgid "Enable"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:617
-#: src/Builder/Payments.php:608
+#: src/Api/WPForms/Payments.php:617 src/Builder/Payments.php:608
 msgid "Default"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:618
-#: src/Builder/Payments.php:609
+#: src/Api/WPForms/Payments.php:618 src/Builder/Payments.php:609
 msgid "Method"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:619
-#: src/Builder/Payments.php:610
+#: src/Api/WPForms/Payments.php:619 src/Builder/Payments.php:610
 msgid "Logo"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:620
-#: src/Builder/Payments.php:611
+#: src/Api/WPForms/Payments.php:620 src/Builder/Payments.php:611
 msgid "Account"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:657
-#: src/Builder/Payments.php:648
+#: src/Api/WPForms/Payments.php:657 src/Builder/Payments.php:648
 msgid "Set as default payment method"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:679
-#: src/Builder/Payments.php:670
+#: src/Api/WPForms/Payments.php:679 src/Builder/Payments.php:670
 msgid "This account is loaded from your ifthenpay gateway and cannot be edited here."
 msgstr ""
 
 #. translators: %s - cooldown time in human readable format
-#: src/Api/WPForms/Payments.php:688
-#: src/Builder/Payments.php:679
-#, php-format
+
+#: src/Api/WPForms/Payments.php:688 src/Builder/Payments.php:679
 msgid "Activation request sent. Try again in %s."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:692
-#: src/Builder/Payments.php:683
+#: src/Api/WPForms/Payments.php:692 src/Builder/Payments.php:683
 msgid "No accounts."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:696
-#: src/Builder/Payments.php:687
+#: src/Api/WPForms/Payments.php:696 src/Builder/Payments.php:687
 msgid "Activate"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:743
-#: src/Builder/Payments.php:734
+#: src/Api/WPForms/Payments.php:743 src/Builder/Payments.php:734
 msgid "Default description"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:745
-#: src/Builder/Payments.php:736
+#: src/Api/WPForms/Payments.php:745 src/Builder/Payments.php:736
 msgid "Shown to customers as the payment description."
 msgstr ""
 
@@ -515,8 +396,7 @@ msgstr ""
 msgid "Paid"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:795
-#: src/Plugin.php:246
+#: src/Api/WPForms/Payments.php:795 src/Plugin.php:246
 msgid "Your payment was successful. Thank you!"
 msgstr ""
 
@@ -524,8 +404,7 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:799
-#: src/Plugin.php:248
+#: src/Api/WPForms/Payments.php:799 src/Plugin.php:248
 msgid "We're waiting for your payment to be confirmed. You don't need to do anything else — this will update automatically once it's complete."
 msgstr ""
 
@@ -533,8 +412,7 @@ msgstr ""
 msgid "Failed"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:803
-#: src/Plugin.php:250
+#: src/Api/WPForms/Payments.php:803 src/Plugin.php:250
 msgid "Your payment could not be completed."
 msgstr ""
 
@@ -542,8 +420,7 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:807
-#: src/Plugin.php:244
+#: src/Api/WPForms/Payments.php:807 src/Plugin.php:244
 msgid "You cancelled the payment."
 msgstr ""
 
@@ -559,8 +436,7 @@ msgstr ""
 msgid "Confirmation Type"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:885
-#: src/Api/WPForms/Payments.php:918
+#: src/Api/WPForms/Payments.php:885 src/Api/WPForms/Payments.php:918
 msgid "Message"
 msgstr ""
 
@@ -592,76 +468,69 @@ msgstr ""
 msgid "Confirmation Redirect URL"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1152
-#: src/Builder/Payments.php:902
+#: src/Api/WPForms/Payments.php:1152 src/Builder/Payments.php:902
 msgid "Gateway key"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1161
-#: src/Builder/Payments.php:911
+#: src/Api/WPForms/Payments.php:1161 src/Builder/Payments.php:911
 msgid "Choose the gateway key that should be used by this form."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1171
-#: src/Builder/Payments.php:921
+#: src/Api/WPForms/Payments.php:1171 src/Builder/Payments.php:921
 msgid "Heads up! ifthenpay payments can't be enabled yet."
 msgstr ""
 
 #. translators: %s - settings page link
-#: src/Api/WPForms/Payments.php:1174
-#: src/Builder/Payments.php:924
-#, php-format
+
+#: src/Api/WPForms/Payments.php:1174 src/Builder/Payments.php:924
 msgid "First, please connect your ifthenpay account on the %s page."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1175
-#: src/Builder/Payments.php:925
+#: src/Api/WPForms/Payments.php:1175 src/Builder/Payments.php:925
 msgid "WPForms Settings"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1213
-#: src/Builder/Payments.php:948
+#: src/Api/WPForms/Payments.php:1213 src/Builder/Payments.php:948
 msgid "Ifthenpay payment settings alert"
 msgstr ""
 
-#: src/Api/WPForms/Process.php:339
-#: src/Builder/Process.php:623
+#: src/Api/WPForms/Process.php:343 src/Builder/Process.php:623
 msgid "Missing required parameters."
 msgstr ""
 
 #. translators: %s: Pay By Link URL.
-#: src/Api/WPForms/Process/EntryManager.php:350
-#: src/Builder/Process.php:1243
-#, php-format
+
+#: src/Api/WPForms/Process/EntryManager.php:350 src/Builder/Process.php:1243
 msgid "Pay by Link: %s"
 msgstr ""
 
-#. translators: %s: ifthenpay request id.
+#. translators: %s: ifthenpay transaction id.
+
 #: src/Api/WPForms/Process/EntryManager.php:396
-#: src/Builder/Process.php:1289
-#, php-format
+msgid "ifthenpay transaction ID received: %s (verifying payment status)"
+msgstr ""
+
+#. translators: %s: ifthenpay request id.
+
+#: src/Api/WPForms/Process/EntryManager.php:440 src/Builder/Process.php:1289
 msgid "ifthenpay request ID: %s"
 msgstr ""
 
 #. translators: 1: ifthenpay gateway label, 2: formatted paid amount.
-#: src/Api/WPForms/Process/EntryManager.php:415
-#: src/Builder/Process.php:1308
-#, php-format
+
+#: src/Api/WPForms/Process/EntryManager.php:459 src/Builder/Process.php:1308
 msgid "%1$s - %2$s - Paid"
 msgstr ""
 
-#: src/Api/WPForms/Process/PaymentDataPreparer.php:153
-#: src/Builder/Process.php:162
+#: src/Api/WPForms/Process/PaymentDataPreparer.php:153 src/Builder/Process.php:162
 msgid "ifthenpay pay-by-link return received (pending confirmation)."
 msgstr ""
 
-#: src/Api/WPForms/Process/PaymentDataPreparer.php:154
-#: src/Builder/Process.php:163
+#: src/Api/WPForms/Process/PaymentDataPreparer.php:154 src/Builder/Process.php:163
 msgid "ifthenpay pay-by-link initialized."
 msgstr ""
 
-#: src/Api/WPForms/Process/PaymentDataPreparer.php:180
-#: src/Builder/Process.php:189
+#: src/Api/WPForms/Process/PaymentDataPreparer.php:180 src/Builder/Process.php:189
 msgid "Payment Failed"
 msgstr ""
 
@@ -725,44 +594,35 @@ msgstr ""
 msgid "Step {current_page} of {last_page}"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:53
-#: src/Templates/ComplexFormTemplate.php:82
-#: src/Templates/ComplexFormTemplate.php:127
+#: src/Templates/ComplexFormTemplate.php:53 src/Templates/ComplexFormTemplate.php:82 src/Templates/ComplexFormTemplate.php:127
 msgid "Next"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:59
-#: src/Templates/ExampleFormTemplate.php:48
+#: src/Templates/ComplexFormTemplate.php:59 src/Templates/ExampleFormTemplate.php:48
 msgid "Name"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:66
-#: src/Templates/ExampleFormTemplate.php:55
+#: src/Templates/ComplexFormTemplate.php:66 src/Templates/ExampleFormTemplate.php:55
 msgid "Email"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:73
-#: src/Templates/ExampleFormTemplate.php:62
+#: src/Templates/ComplexFormTemplate.php:73 src/Templates/ExampleFormTemplate.php:62
 msgid "Address"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:89
-#: src/Templates/ExampleFormTemplate.php:72
+#: src/Templates/ComplexFormTemplate.php:89 src/Templates/ExampleFormTemplate.php:72
 msgid "Dropdown Items"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:92
-#: src/Templates/ExampleFormTemplate.php:75
+#: src/Templates/ComplexFormTemplate.php:92 src/Templates/ExampleFormTemplate.php:75
 msgid "First Item"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:97
-#: src/Templates/ExampleFormTemplate.php:80
+#: src/Templates/ComplexFormTemplate.php:97 src/Templates/ExampleFormTemplate.php:80
 msgid "Second Item"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:102
-#: src/Templates/ExampleFormTemplate.php:85
+#: src/Templates/ComplexFormTemplate.php:102 src/Templates/ExampleFormTemplate.php:85
 msgid "Third Item"
 msgstr ""
 
@@ -778,18 +638,15 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:149
-#: src/Templates/ExampleFormTemplate.php:106
+#: src/Templates/ComplexFormTemplate.php:149 src/Templates/ExampleFormTemplate.php:106
 msgid "Submit"
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:150
-#: src/Templates/ExampleFormTemplate.php:107
+#: src/Templates/ComplexFormTemplate.php:150 src/Templates/ExampleFormTemplate.php:107
 msgid "Sending..."
 msgstr ""
 
-#: src/Templates/ComplexFormTemplate.php:163
-#: src/Templates/ExampleFormTemplate.php:120
+#: src/Templates/ComplexFormTemplate.php:163 src/Templates/ExampleFormTemplate.php:120
 msgid "Thanks! We will be in touch shortly."
 msgstr ""
 
@@ -800,3 +657,24 @@ msgstr ""
 #: src/Templates/ExampleFormTemplate.php:33
 msgid "A ready-made example form showing the ifthenpay | Payment Gateway field alongside common field types."
 msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "ifthenpay | Payments for WPForms"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/ifthenpay/ifthenpay-payments-for-wpforms"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "ifthenpay Pay by Link integration for WPForms."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "ifthenpay"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://ifthenpay.com/"
+msgstr ""
+
