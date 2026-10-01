@@ -3,11 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 The format loosely follows Keep a Changelog recommendations.
+## [2.0.4] - 2026-09-25
+
+### Fixed
+- Workaround for the new ajax verification on wpforms lite 2.0.2.1.
 
 ## [2.0.3] - 2026-09-11
 
 ### Fixed
-- Optimize payment confirmation speed on frontend and improve server-side transaction tracking
+- Optimize payment confirmation speed on frontend and improve server-side transaction tracking.
 
 ## [2.0.2] - 2026-09-10
 

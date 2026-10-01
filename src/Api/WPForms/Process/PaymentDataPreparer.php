@@ -225,7 +225,7 @@ class PaymentDataPreparer
 	 */
 	public function entry_saved_process(array $fields, array $entry, array $formData, int $entryId, int $paymentId): void
 	{
-		if ($entryId <= 0 || false === wpforms_has_field_type(IFTP_PBL_FIELD_TYPE, $formData, false)) {
+		if (false === wpforms_has_field_type(IFTP_PBL_FIELD_TYPE, $formData, false)) {
 			return;
 		}
 
@@ -249,14 +249,20 @@ class PaymentDataPreparer
 			return;
 		}
 
+		// Stored even when $entryId is 0: WPForms Lite (or Pro with entry storage disabled)
+		// never saves an entry, and without this payload the held-back emails are lost.
+		if ($this->entryManager->is_notification_suppressed_for($paymentId)) {
+			$this->entryManager->store_deferred_notification_payload($paymentId, $fields, $entry, $formData, $entryId);
+		}
+
+		if ($entryId <= 0) {
+			return;
+		}
+
 		$context = $this->get_context($fields);
 		$paymentMethod = (string) $context['payment_method'];
 
 		$this->paymentRecordStore->update_payment_row($paymentId, ['entry_id' => $entryId]);
-
-		if ($this->entryManager->is_notification_suppressed_for($paymentId)) {
-			$this->entryManager->store_deferred_notification_payload($paymentId, $fields, $entry, $formData, $entryId);
-		}
 
 		$this->sync_confirmed_payment_method($paymentId, $paymentMethod);
 

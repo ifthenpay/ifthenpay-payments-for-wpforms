@@ -200,8 +200,17 @@ class EntryManager
 		// - a "Redirect"/"Page" confirmation type ends the request with wp_redirect()+exit — fatal
 		//   inside an AJAX response or the webhook's own 200 OK — so the redirect URL is forced
 		//   empty, which routes process() through its normal no-redirect (message) branch instead.
+		// - since WPForms Lite 2.0.2.1 an ajax_submit form is rejected as "corrupted post data"
+		//   unless wp_doing_ajax() is true, which the webhook (a plain GET on init) never is.
 		$bypass_direct_post_check = static fn () => true;
 		$suppress_confirmation_redirect = static fn () => '';
+		$force_doing_ajax = static fn () => true;
+		// Set when process() gets past validation and saves, even when it has no entry id to
+		// write back (WPForms Lite, or Pro with entry storage disabled).
+		$replay_saved = false;
+		$mark_replay_saved = static function () use ( &$replay_saved ): void {
+			$replay_saved = true;
+		};
 		// Only used when $deferNotifications is true — see the property's docblock and
 		// release_deferred_notifications() for why a payment created as "pending" doesn't get
 		// its notification emails yet.
@@ -209,6 +218,8 @@ class EntryManager
 
 		add_filter( 'wpforms_process_anti_spam_direct_post_bypass', $bypass_direct_post_check );
 		add_filter( 'wpforms_process_redirect_url', $suppress_confirmation_redirect );
+		add_filter( 'wp_doing_ajax', $force_doing_ajax );
+		add_action( 'wpforms_process_entry_saved', $mark_replay_saved );
 
 		if ( $deferNotifications ) {
 			add_filter( 'wpforms_entry_email', $suppress_entry_email );
@@ -234,6 +245,8 @@ class EntryManager
 			$_POST = $original_post;
 			remove_filter( 'wpforms_process_anti_spam_direct_post_bypass', $bypass_direct_post_check );
 			remove_filter( 'wpforms_process_redirect_url', $suppress_confirmation_redirect );
+			remove_filter( 'wp_doing_ajax', $force_doing_ajax );
+			remove_action( 'wpforms_process_entry_saved', $mark_replay_saved );
 
 			if ( $deferNotifications ) {
 				remove_filter( 'wpforms_entry_email', $suppress_entry_email );
@@ -247,6 +260,12 @@ class EntryManager
 		$entry_id        = $updated_payment && ! empty( $updated_payment->entry_id ) ? (int) $updated_payment->entry_id : 0;
 
 		if ( $entry_id <= 0 ) {
+			// Saved but no entry id to write back — the submission is done, so drop the payload,
+			// otherwise every later call would replay it again and resend its emails.
+			if ( $replay_saved ) {
+				$this->clear_pending_entry_payload( $payment_id );
+			}
+
 			return 0;
 		}
 
@@ -300,7 +319,8 @@ class EntryManager
 		$optionKey = $this->deferred_notification_option_key( $paymentId );
 		$payload   = get_option( $optionKey, null );
 
-		if ( ! is_array( $payload ) || empty( $payload['entry_id'] ) || ! function_exists( 'wpforms' ) ) {
+		// entry_id may legitimately be 0 here (see PaymentDataPreparer::entry_saved_process()).
+		if ( ! is_array( $payload ) || ! function_exists( 'wpforms' ) ) {
 			return;
 		}
 
