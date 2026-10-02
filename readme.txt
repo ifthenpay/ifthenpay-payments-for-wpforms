@@ -4,7 +4,7 @@ Tags: ifthenpay, wpforms, payments, ifthen, gateway
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,9 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 8. (Admin Only) Payment Entries
 
 == Changelog ==
+= 2.0.5 =
+*Fixed: custom Popup Confirmation Messages were replaced by the default text when the form was placed inside a page builder block that rewrites HTML attributes (e.g. Avada's Text Block).*
+
 = 2.0.4 =
 *Fixed: workaround for the new ajax verification on wpforms lite 2.0.2.1*
 
@@ -152,6 +155,9 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 * Initial release: WPForms integration, ifthenpay payments, multi-method support, modal.
 
 == Upgrade Notice ==
+= 2.0.5 =
+Update so custom popup confirmation messages show correctly on page builders such as Avada. Clear your site cache after updating.
+
 = 2.0.4 =
 Update for e-mail sending to work again on WPForms lite new 2.0.2.1 version.
 
