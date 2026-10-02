@@ -14,6 +14,24 @@
 		failed: 'failed',
 	};
 
+	// The attribute comes URL-encoded (see Field::field_display()), but I still accept plain
+	// JSON from an older cached page. If it's unreadable I just fall back to the defaults.
+	function parseConfirmationOverrides($field) {
+		const raw =
+			$field && $field.length ? $field.attr('data-iftp-confirmations') : '';
+		if (!raw) {
+			return {};
+		}
+		try {
+			const parsed = JSON.parse(
+				raw.charAt(0) === '{' ? raw : decodeURIComponent(raw)
+			);
+			return parsed && typeof parsed === 'object' ? parsed : {};
+		} catch (e) {
+			return {};
+		}
+	}
+
 	function apiPost(action, data) {
 		return $.post(
 			cfg.ajax_url,
@@ -240,8 +258,7 @@
 		 * (e.g. "completed") — see CONFIRMATION_OVERRIDE_KEY.
 		 */
 		getConfirmationOverride(status, $field) {
-			const overrides =
-				($field && $field.data('iftpConfirmations')) || {};
+			const overrides = parseConfirmationOverrides($field);
 
 			return overrides[CONFIRMATION_OVERRIDE_KEY[status] || status] || {};
 		}

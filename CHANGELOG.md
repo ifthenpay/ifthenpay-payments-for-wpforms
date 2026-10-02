@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 
 The format loosely follows Keep a Changelog recommendations.
+## [2.0.5] - 2026-10-02
+
+### Fixed
+- Custom popup confirmation messages falling back to the default text when the form is placed inside a page builder block that rewrites HTML attributes (e.g. Avada's Text Block).
+
 ## [2.0.4] - 2026-09-25
 
 ### Fixed

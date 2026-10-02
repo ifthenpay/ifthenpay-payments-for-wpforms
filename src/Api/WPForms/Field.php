@@ -526,8 +526,11 @@ class Field extends \WPForms_Field
         $wrapperClass = 'wpforms-field wpforms-field-' . esc_attr($this->type) . ' iftp-pbl-live-field' . ($hidePublicBox ? ' iftp-pbl-box-hidden' : '');
         $wrapperStyle = $hidePublicBox ? 'padding:15px 0 0;margin:0;' : 'margin:16px 0 0;';
         $confirmations = is_array($availability['config']['confirmations'] ?? null) ? $availability['config']['confirmations'] : [];
+        // I URL-encode the JSON so page builders that rewrite attribute values (e.g. Avada's
+        // Text Block strips its braces) can't break it.
+        $confirmationsAttr = rawurlencode((string) wp_json_encode($this->build_confirmation_overrides($confirmations)));
 
-        echo '<div class="' . $wrapperClass . '" data-iftp-config-ready="' . esc_attr(!empty($availability['is_ready']) ? '1' : '0') . '" data-iftp-disabled-reason="' . esc_attr((string) $availability['message']) . '" data-iftp-confirmations="' . esc_attr((string) wp_json_encode($this->build_confirmation_overrides($confirmations))) . '" style="' . esc_attr($wrapperStyle) . '">';
+        echo '<div class="' . $wrapperClass . '" data-iftp-config-ready="' . esc_attr(!empty($availability['is_ready']) ? '1' : '0') . '" data-iftp-disabled-reason="' . esc_attr((string) $availability['message']) . '" data-iftp-confirmations="' . esc_attr($confirmationsAttr) . '" style="' . esc_attr($wrapperStyle) . '">';
         echo '<input type="hidden" class="iftp-pbl-payment-id-input" name="iftp_pbl_payment_id" value="">';
         echo '<input type="hidden" class="iftp-pbl-paid-now-return-input" name="iftp_pbl_paid_now_return" value="">';
         echo '<input type="hidden" class="iftp-pbl-nonce-input" name="iftp_pbl_nonce" value="' . esc_attr(wp_create_nonce('iftp_pbl_frontend')) . '">';
