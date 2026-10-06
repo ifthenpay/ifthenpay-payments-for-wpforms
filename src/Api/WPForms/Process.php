@@ -116,7 +116,7 @@ class Process
 			$methods_config         = IfthenpayPayload::get_gateway_methods_config( $config, $gateway_key );
 			$selected_method_entity = IfthenpayPayload::get_selected_method_entity( $config, $methods_config );
 			$selected_method_code   = IfthenpayPayload::get_selected_method_code( $config, $methods_config );
-			$description            = 'Payment Gateway';
+			$description            = isset( $config['description'] ) ? trim( (string) $config['description'] ) : '';
 			$expire_days            = isset( $config['expire_days'] ) ? max( 1, absint( $config['expire_days'] ) ) : 1;
 			$accounts               = IfthenpayPayload::build_accounts_string( $methods_config );
 

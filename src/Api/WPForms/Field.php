@@ -580,9 +580,13 @@ class Field extends \WPForms_Field
 
         foreach (['paid', 'pending', 'cancelled', 'failed'] as $status) {
             $entry = isset($confirmations[$status]) && is_array($confirmations[$status]) ? $confirmations[$status] : [];
+            $title = trim((string) ($entry['title'] ?? ''));
             $message = trim((string) ($entry['message'] ?? ''));
 
             $statusOverride = [];
+            if ($title !== '') {
+                $statusOverride['title'] = $title;
+            }
             if ($message !== '') {
                 $statusOverride['message'] = $message;
             }

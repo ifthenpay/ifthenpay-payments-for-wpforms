@@ -501,8 +501,8 @@
 	}
 
 	/**
-	 * Shows/hides a confirmation panel's Message/Page/Redirect fields (and, on the Paid
-	 * panel, the entry-preview toggle alongside Message) to match its "Confirmation Type"
+	 * Shows/hides a confirmation panel's Message/Page/Redirect fields (plus the popup
+	 * title and, on the Paid panel, the entry-preview toggle alongside Message) to match its "Confirmation Type"
 	 * select. Deliberately NOT reusing WPForms' own confirmationFieldsToggle() (from its
 	 * settings-confirmations module) — that function only finds anything to hide/show by
 	 * walking up to the closest ".wpforms-builder-settings-block-content" ancestor, which
@@ -512,6 +512,11 @@
 	function syncConfirmationTypeFields($select) {
 		const $panel = $select.closest('.iftp-pbl-confirmations-panel');
 		const type = String($select.val() || 'message');
+
+		// The title only shows in our popup, so I hide it for page/URL too.
+		$panel
+			.find('.iftp-pbl-confirmations-title-field')
+			.toggle(type === 'message');
 
 		$panel
 			.find(
