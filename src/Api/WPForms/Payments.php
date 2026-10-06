@@ -766,6 +766,7 @@ class Payments
             // render_confirmation_status_block()) — matches how WPForms sanitizes its own
             // native confirmation message.
             $sanitized[$status] = [
+                'title' => sanitize_text_field((string) ($entry['title'] ?? '')),
                 'message' => wp_kses_post((string) ($entry['message'] ?? '')),
             ];
 
@@ -792,18 +793,22 @@ class Payments
         return [
             'paid' => [
                 'label' => __('Paid', 'ifthenpay-payments-for-wpforms'),
+                'default_title' => __('Payment received', 'ifthenpay-payments-for-wpforms'),
                 'placeholder' => __('Your payment was successful. Thank you!', 'ifthenpay-payments-for-wpforms'),
             ],
             'pending' => [
                 'label' => __('Pending', 'ifthenpay-payments-for-wpforms'),
+                'default_title' => __('Payment processing', 'ifthenpay-payments-for-wpforms'),
                 'placeholder' => __("We're waiting for your payment to be confirmed. You don't need to do anything else — this will update automatically once it's complete.", 'ifthenpay-payments-for-wpforms'),
             ],
             'failed' => [
                 'label' => __('Failed', 'ifthenpay-payments-for-wpforms'),
+                'default_title' => __('Payment failed', 'ifthenpay-payments-for-wpforms'),
                 'placeholder' => __('Your payment could not be completed.', 'ifthenpay-payments-for-wpforms'),
             ],
             'cancelled' => [
                 'label' => __('Cancelled', 'ifthenpay-payments-for-wpforms'),
+                'default_title' => __('Payment cancelled', 'ifthenpay-payments-for-wpforms'),
                 'placeholder' => __('You cancelled the payment.', 'ifthenpay-payments-for-wpforms'),
             ],
         ];
@@ -888,6 +893,7 @@ class Payments
                 . '</select></div>';
         }
 
+        $html .= $this->render_confirmation_title_field($status, $meta, $entry, $type === 'message' ? '' : 'display:none;');
         $html .= $this->render_confirmation_message_field($status, $meta, $entry, $canRedirect, $type === 'message' ? '' : 'display:none;');
 
         if ($status === 'paid') {
@@ -900,6 +906,26 @@ class Payments
         }
 
         return $html . '</div>';
+    }
+
+    /**
+     * @param array<string, string> $meta
+     * @param array<string, string> $entry
+     */
+    private function render_confirmation_title_field(string $status, array $meta, array $entry, string $hiddenStyle): string
+    {
+        $slug = esc_attr($this->slug);
+        $fieldId = 'iftp_pbl_confirmations_' . $status . '_title';
+        // I pre-fill it like the message, so the admin edits the real default.
+        $title = (string) ($entry['title'] ?? '');
+        if ($title === '') {
+            $title = $meta['default_title'];
+        }
+
+        return '<div class="wpforms-panel-field wpforms-panel-field-text iftp-pbl-tight-field iftp-pbl-confirmations-title-field" style="margin-top:10px;' . esc_attr($hiddenStyle) . '">'
+            . '<label for="' . esc_attr($fieldId) . '">' . esc_html__('Popup Title', 'ifthenpay-payments-for-wpforms') . '</label>'
+            . '<input type="text" id="' . esc_attr($fieldId) . '" name="payments[' . $slug . '][confirmations][' . esc_attr($status) . '][title]" value="' . esc_attr($title) . '" class="widefat">'
+            . '</div>';
     }
 
     /**

@@ -238,6 +238,9 @@
 			// TinyMCE editor, so it's rendered with .html(), not .text() (see
 			// renderOutcomeModal()).
 			const override = this.getConfirmationOverride(status, $field);
+			const title =
+				(override.title && String(override.title).trim()) ||
+				entry.title;
 			const message =
 				(override.message && String(override.message).trim()) ||
 				entry.message;
@@ -246,7 +249,7 @@
 
 			this.renderOutcomeModal(
 				status,
-				entry.title,
+				title,
 				message,
 				entryPreviewHtml || ''
 			);
