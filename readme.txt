@@ -122,7 +122,9 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 8. (Admin Only) Payment Entries
 
 == Changelog ==
+
 = 2.1.0 =
+=======
 *Added: Title Configuration to the Gateway Configurations.*
 *Fixed: custom Popup Confirmation Messages were replaced by the default text when the form was placed inside a page builder block that rewrites HTML attributes (e.g. Avada's Text Block).*
 *Fixed: workaround for the new ajax verification on wpforms lite 2.0.2.1*
