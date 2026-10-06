@@ -5,10 +5,12 @@ All notable changes to this project will be documented in this file.
 The format loosely follows Keep a Changelog recommendations.
 ## [2.1.0] - 2026-10-06
 
+### Added
+- Added Title Configuration to the Gateway Configurations.
+
 ### Fixed
 - Custom popup confirmation messages falling back to the default text when the form is placed inside a page builder block that rewrites HTML attributes (e.g. Avada's Text Block).
 - Workaround for the new ajax verification on wpforms lite 2.0.2.1.
-- Added Title Configuration to the Gateway Configurations.
 - Bug fix Function of description was not being wired onto the pay by link.
 
 ## [2.0.3] - 2026-09-11
