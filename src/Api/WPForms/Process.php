@@ -154,6 +154,16 @@ class Process
 
 			$pbl_ref = $this->webhookContextStore->generate_pbl_ref( $payment_id );
 
+			// I can only fill the placeholders here, once the payment id has been reserved.
+			$description = strtr(
+				$description,
+				array(
+					'{payment_id}' => (string) $payment_id,
+					'{form_id}'    => (string) $form_id,
+					'{form_name}'  => isset( $form_data['settings']['form_title'] ) ? (string) $form_data['settings']['form_title'] : '',
+				)
+			);
+
 			$base_url = wp_get_referer() ?: home_url( '/' );
 			$gateway_urls = IfthenpayPayload::build_gateway_urls( $payment_id, $base_url );
 
