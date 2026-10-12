@@ -122,6 +122,7 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 8. (Admin Only) Payment Entries
 
 == Changelog ==
+
 = 2.1.1 =
 *Added: Enhanced payment description placeholders.*
 
