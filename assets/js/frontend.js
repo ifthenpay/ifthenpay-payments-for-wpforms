@@ -14,6 +14,22 @@
 		failed: 'failed',
 	};
 
+	// One glyph per popup outcome status, inherited color via currentColor (see
+	// .iftp-pbl-outcome-modal-icon). Static markup, so .html() on these is safe.
+	const OUTCOME_ICON_SVG_OPEN =
+		'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">';
+	const OUTCOME_ICONS = {
+		completed: OUTCOME_ICON_SVG_OPEN + '<path d="M20 6 9 17l-5-5"/></svg>',
+		pending:
+			OUTCOME_ICON_SVG_OPEN +
+			'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+		failed:
+			OUTCOME_ICON_SVG_OPEN + '<path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
+		cancelled:
+			OUTCOME_ICON_SVG_OPEN +
+			'<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></svg>',
+	};
+
 	// The attribute comes URL-encoded (see Field::field_display()), but I still accept plain
 	// JSON from an older cached page. If it's unreadable I just fall back to the defaults.
 	function parseConfirmationOverrides($field) {
@@ -307,19 +323,44 @@
 				'<div class="iftp-pbl-outcome-modal" role="dialog" aria-modal="true">'
 			);
 			const $close = $(
-				'<button type="button" class="iftp-pbl-outcome-modal-close" aria-label="Close">'
-			).html('&times;');
-			const $title = $('<p class="iftp-pbl-outcome-modal-title">');
-			const $message = $('<p class="iftp-pbl-outcome-modal-message">');
+				'<button type="button" class="iftp-pbl-outcome-modal-close">'
+			)
+				.attr(
+					'aria-label',
+					this.getFrontendText('outcome_close_label', 'Close')
+				)
+				.html('&times;');
+			const $icon = $(
+				'<div class="iftp-pbl-outcome-modal-icon" aria-hidden="true">'
+			);
+			const $title = $(
+				'<p class="iftp-pbl-outcome-modal-title" id="iftp-pbl-outcome-modal-title">'
+			);
+			// A div, not a p — the message is rich TinyMCE HTML and may carry its own <p>s.
+			const $message = $('<div class="iftp-pbl-outcome-modal-message">');
+			const $divider = $('<div class="iftp-pbl-outcome-modal-divider">');
 			const $entryPreview = $(
 				'<div class="iftp-pbl-outcome-modal-entry-preview">'
 			);
+			const $done = $(
+				'<button type="button" class="iftp-pbl-outcome-modal-done">'
+			).text(this.getFrontendText('outcome_done_text', 'Done'));
 
-			$modal.append($close, $title, $message, $entryPreview);
+			$modal.attr('aria-labelledby', 'iftp-pbl-outcome-modal-title');
+			$modal.append(
+				$close,
+				$icon,
+				$title,
+				$message,
+				$divider,
+				$entryPreview,
+				$done
+			);
 			$overlay.append($modal);
 			$('body').append($overlay);
 
 			$close.on('click', () => this.dismissOutcomeModal());
+			$done.on('click', () => this.dismissOutcomeModal());
 			$overlay.on('click', (e) => {
 				if (e.target === $overlay.get(0)) {
 					this.dismissOutcomeModal();
@@ -333,6 +374,9 @@
 
 			this.$outcomeModalOverlay = $overlay;
 			this.$outcomeModalBox = $modal;
+			this.$outcomeModalIcon = $icon;
+			this.$outcomeModalDivider = $divider;
+			this.$outcomeModalDone = $done;
 			this.$outcomeModalTitle = $title;
 			this.$outcomeModalMessage = $message;
 			this.$outcomeModalEntryPreview = $entryPreview;
@@ -355,11 +399,16 @@
 		 */
 		renderOutcomeModal(status, title, message, entryPreviewHtml) {
 			this.getOutcomeModalElements();
+			const wasOpen = this.$outcomeModalOverlay.hasClass('iftp-pbl-is-open');
 
+			this.$outcomeModalIcon.html(
+				OUTCOME_ICONS[status] || OUTCOME_ICONS.pending
+			);
 			this.$outcomeModalTitle.text(title);
 			this.$outcomeModalMessage.html(message);
 			this.$outcomeModalEntryPreview.html(entryPreviewHtml || '');
 			this.$outcomeModalEntryPreview.toggle(!!entryPreviewHtml);
+			this.$outcomeModalDivider.toggle(!!entryPreviewHtml);
 
 			if (this.appliedOutcomeStatusClass) {
 				this.$outcomeModalBox.removeClass(
@@ -371,6 +420,11 @@
 
 			this.$outcomeModalOverlay.addClass('iftp-pbl-is-open');
 			this.lockScroll();
+
+			// I only move focus on first open, so a poll tick doesn't yank it around.
+			if (!wasOpen) {
+				this.$outcomeModalDone.trigger('focus');
+			}
 		}
 
 		dismissOutcomeModal() {

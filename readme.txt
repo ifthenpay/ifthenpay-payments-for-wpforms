@@ -124,7 +124,7 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 == Changelog ==
 
 = 2.1.1 =
-*Added: Enhanced payment description placeholders.*
+*Added: Enhanced payment description placeholders & Design change on the status popups.*
 
 = 2.1.0 =
 *Added: Title Configuration to the Gateway Configurations.*

@@ -6,7 +6,7 @@ The format loosely follows Keep a Changelog recommendations.
 ## [2.1.1] - 2026-10-12
 
 ### Added
-- Enhanced payment description placeholders.
+- Enhanced payment description placeholders & Design change on the status popups.
 
 ## [2.1.0] - 2026-10-06
 
