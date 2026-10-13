@@ -248,6 +248,8 @@ final class Plugin {
 				'pending_message'                 => __( "We're waiting for your payment to be confirmed. You don't need to do anything else — this will update automatically once it's complete.", 'ifthenpay-payments-for-wpforms' ),
 				'failed_title'                    => __( 'Payment failed', 'ifthenpay-payments-for-wpforms' ),
 				'failed_message'                  => __( 'Your payment could not be completed.', 'ifthenpay-payments-for-wpforms' ),
+				'outcome_done_text'               => __( 'Done', 'ifthenpay-payments-for-wpforms' ),
+				'outcome_close_label'             => __( 'Close', 'ifthenpay-payments-for-wpforms' ),
 			]
 		);
 	}
