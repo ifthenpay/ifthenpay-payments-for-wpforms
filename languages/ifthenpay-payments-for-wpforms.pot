@@ -2,14 +2,14 @@
 # This file is distributed under the GPL v3.
 msgid ""
 msgstr ""
-"Project-Id-Version: ifthenpay | Payments for WPForms 2.0.3\n"
+"Project-Id-Version: ifthenpay | Payments for WPForms 2.1.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ifthenpay-payments-for-wpforms\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-25T08:50:37+00:00\n"
+"POT-Creation-Date: 2026-10-13T14:53:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ifthenpay-payments-for-wpforms\n"
@@ -175,8 +175,8 @@ msgstr ""
 
 #: src/Api/WPForms/Field.php:266
 #: src/Api/WPForms/Field.php:513
-#: src/Api/WPForms/Field.php:822
-#: src/Api/WPForms/Field.php:894
+#: src/Api/WPForms/Field.php:829
+#: src/Api/WPForms/Field.php:901
 #: src/Builder/Field.php:268
 #: src/Builder/Field.php:515
 #: src/Builder/Field.php:770
@@ -287,30 +287,30 @@ msgstr ""
 msgid "Connect your ifthenpay Backoffice Key in WPForms Settings » Payments » ifthenpay to use this field."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:542
-#: src/Api/WPForms/Field.php:911
+#: src/Api/WPForms/Field.php:545
+#: src/Api/WPForms/Field.php:918
 #: src/Builder/Field.php:543
 #: src/Builder/Field.php:845
 msgid "Ifthenpay"
 msgstr ""
 
-#: src/Api/WPForms/Field.php:633
+#: src/Api/WPForms/Field.php:640
 #: src/Builder/Field.php:581
 msgid "This field is disabled because ifthenpay is turned off in the Payments tab for this form."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:636
+#: src/Api/WPForms/Field.php:643
 #: src/Builder/Field.php:584
 msgid "This field is disabled because no gateway key is selected in the Payments tab."
 msgstr ""
 
-#: src/Api/WPForms/Field.php:639
+#: src/Api/WPForms/Field.php:646
 #: src/Builder/Field.php:587
 msgid "This field is disabled because no payment methods are enabled for the selected gateway."
 msgstr ""
 
 #: src/Api/WPForms/Payments.php:128
-#: src/Api/WPForms/Payments.php:1169
+#: src/Api/WPForms/Payments.php:1198
 #: src/Builder/Payments.php:123
 #: src/Builder/Payments.php:919
 msgid "Connect WPForms to ifthenpay."
@@ -324,7 +324,7 @@ msgid "To use %s, first add the ifthenpay payment field to your form."
 msgstr ""
 
 #: src/Api/WPForms/Payments.php:135
-#: src/Api/WPForms/Payments.php:1177
+#: src/Api/WPForms/Payments.php:1206
 #: src/Builder/Payments.php:130
 #: src/Builder/Payments.php:927
 msgid "Learn more about ifthenpay | Payment Gateway."
@@ -507,124 +507,159 @@ msgid "Default description"
 msgstr ""
 
 #: src/Api/WPForms/Payments.php:745
-#: src/Builder/Payments.php:736
-msgid "Shown to customers as the payment description."
+msgid "Shown to customers as the payment description. You can use these placeholders:"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:794
+#: src/Api/WPForms/Payments.php:746
+msgid "payment number"
+msgstr ""
+
+#: src/Api/WPForms/Payments.php:747
+msgid "form ID"
+msgstr ""
+
+#: src/Api/WPForms/Payments.php:748
+msgid "form name"
+msgstr ""
+
+#: src/Api/WPForms/Payments.php:798
 msgid "Paid"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:795
+#: src/Api/WPForms/Payments.php:799
+#: src/Plugin.php:245
+msgid "Payment received"
+msgstr ""
+
+#: src/Api/WPForms/Payments.php:800
 #: src/Plugin.php:246
 msgid "Your payment was successful. Thank you!"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:798
+#: src/Api/WPForms/Payments.php:803
 msgid "Pending"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:799
+#: src/Api/WPForms/Payments.php:804
+#: src/Plugin.php:247
+msgid "Payment processing"
+msgstr ""
+
+#: src/Api/WPForms/Payments.php:805
 #: src/Plugin.php:248
 msgid "We're waiting for your payment to be confirmed. You don't need to do anything else — this will update automatically once it's complete."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:802
+#: src/Api/WPForms/Payments.php:808
 msgid "Failed"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:803
+#: src/Api/WPForms/Payments.php:809
+#: src/Plugin.php:249
+msgid "Payment failed"
+msgstr ""
+
+#: src/Api/WPForms/Payments.php:810
 #: src/Plugin.php:250
 msgid "Your payment could not be completed."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:806
+#: src/Api/WPForms/Payments.php:813
 msgid "Cancelled"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:807
+#: src/Api/WPForms/Payments.php:814
+#: src/Plugin.php:243
+msgid "Payment cancelled"
+msgstr ""
+
+#: src/Api/WPForms/Payments.php:815
 #: src/Plugin.php:244
 msgid "You cancelled the payment."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:829
+#: src/Api/WPForms/Payments.php:837
 msgid "Popup Confirmation Messages"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:830
+#: src/Api/WPForms/Payments.php:838
 msgid "Customize what customers see in the ifthenpay payment popup for each outcome, pre-filled with the default text below. This is separate from the WPForms Confirmations tab, which does not apply to this popup."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:883
+#: src/Api/WPForms/Payments.php:891
 msgid "Confirmation Type"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:885
-#: src/Api/WPForms/Payments.php:918
+#: src/Api/WPForms/Payments.php:893
+#: src/Api/WPForms/Payments.php:947
 msgid "Message"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:886
+#: src/Api/WPForms/Payments.php:894
 msgid "Show Page"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:887
+#: src/Api/WPForms/Payments.php:895
 msgid "Go to URL (Redirect)"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:917
+#: src/Api/WPForms/Payments.php:929
+msgid "Popup Title"
+msgstr ""
+
+#: src/Api/WPForms/Payments.php:946
 msgid "Confirmation Message"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:947
+#: src/Api/WPForms/Payments.php:976
 msgid "Show entry preview after confirmation message"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:963
+#: src/Api/WPForms/Payments.php:992
 msgid "— Select a page —"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:970
+#: src/Api/WPForms/Payments.php:999
 msgid "Confirmation Page"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:985
+#: src/Api/WPForms/Payments.php:1014
 msgid "Confirmation Redirect URL"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1152
+#: src/Api/WPForms/Payments.php:1181
 #: src/Builder/Payments.php:902
 msgid "Gateway key"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1161
+#: src/Api/WPForms/Payments.php:1190
 #: src/Builder/Payments.php:911
 msgid "Choose the gateway key that should be used by this form."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1171
+#: src/Api/WPForms/Payments.php:1200
 #: src/Builder/Payments.php:921
 msgid "Heads up! ifthenpay payments can't be enabled yet."
 msgstr ""
 
 #. translators: %s - settings page link
-#: src/Api/WPForms/Payments.php:1174
+#: src/Api/WPForms/Payments.php:1203
 #: src/Builder/Payments.php:924
 #, php-format
 msgid "First, please connect your ifthenpay account on the %s page."
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1175
+#: src/Api/WPForms/Payments.php:1204
 #: src/Builder/Payments.php:925
 msgid "WPForms Settings"
 msgstr ""
 
-#: src/Api/WPForms/Payments.php:1213
+#: src/Api/WPForms/Payments.php:1242
 #: src/Builder/Payments.php:948
 msgid "Ifthenpay payment settings alert"
 msgstr ""
 
-#: src/Api/WPForms/Process.php:343
+#: src/Api/WPForms/Process.php:353
 #: src/Builder/Process.php:623
 msgid "Missing required parameters."
 msgstr ""
@@ -671,6 +706,10 @@ msgstr ""
 msgid "Payment Failed"
 msgstr ""
 
+#: src/Builder/Payments.php:736
+msgid "Shown to customers as the payment description."
+msgstr ""
+
 #: src/Plugin.php:206
 msgid "requires WPForms to be installed and active."
 msgstr ""
@@ -699,20 +738,12 @@ msgstr ""
 msgid "Unable to open payment"
 msgstr ""
 
-#: src/Plugin.php:243
-msgid "Payment cancelled"
+#: src/Plugin.php:251
+msgid "Done"
 msgstr ""
 
-#: src/Plugin.php:245
-msgid "Payment received"
-msgstr ""
-
-#: src/Plugin.php:247
-msgid "Payment processing"
-msgstr ""
-
-#: src/Plugin.php:249
-msgid "Payment failed"
+#: src/Plugin.php:252
+msgid "Close"
 msgstr ""
 
 #: src/Templates/ComplexFormTemplate.php:25
