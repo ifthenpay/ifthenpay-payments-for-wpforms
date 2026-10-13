@@ -742,7 +742,10 @@ class Payments
             . '<div class="wpforms-panel-field-row" style="margin-top:10px;">'
             . '<label for="iftp_pbl_description" style="display:block;margin-bottom:4px;">' . esc_html__('Default description', 'ifthenpay-payments-for-wpforms') . '</label>'
             . '<input type="text" id="iftp_pbl_description" name="payments[' . $slug . '][description]" value="' . esc_attr($description) . '" class="regular-text" style="min-width:320px;">'
-            . '<p class="description">' . esc_html__('Shown to customers as the payment description.', 'ifthenpay-payments-for-wpforms') . '</p>'
+            . '<p class="description">' . esc_html__('Shown to customers as the payment description. You can use these placeholders:', 'ifthenpay-payments-for-wpforms') . '</p>'
+            . '<p class="description"><code>{payment_id}</code> ' . esc_html__('payment number', 'ifthenpay-payments-for-wpforms')
+            . ' &middot; <code>{form_id}</code> ' . esc_html__('form ID', 'ifthenpay-payments-for-wpforms')
+            . ' &middot; <code>{form_name}</code> ' . esc_html__('form name', 'ifthenpay-payments-for-wpforms') . '</p>'
             . '</div></div>';
     }
 

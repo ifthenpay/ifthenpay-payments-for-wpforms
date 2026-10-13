@@ -123,8 +123,10 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 
 == Changelog ==
 
+= 2.1.1 =
+*Added: Enhanced payment description placeholders & Design change on the status popups.*
+
 = 2.1.0 =
-=======
 *Added: Title Configuration to the Gateway Configurations.*
 *Fixed: custom Popup Confirmation Messages were replaced by the default text when the form was placed inside a page builder block that rewrites HTML attributes (e.g. Avada's Text Block).*
 *Fixed: workaround for the new ajax verification on wpforms lite 2.0.2.1*
@@ -157,6 +159,9 @@ All network requests are performed server-side over HTTPS. Sensitive credentials
 * Initial release: WPForms integration, ifthenpay payments, multi-method support, modal.
 
 == Upgrade Notice ==
+= 2.1.1 =
+Enhanced payment description placeholders & Design change on the status popups.
+
 = 2.1.0 =
 Update so custom popup confirmation messages show correctly on page builders such as Avada. Clear your site cache after updating.
 
@@ -174,7 +179,6 @@ This version fixes the callback url bug from version 2.0.0.
 
 = 2.0.0 =
 This version adds Webhooks and fixes a bug where 0-quantity products added to the total value. Upgrade immediately.
-
 
 = 1.0.0 =
 Initial release. Review gateway settings payments before going live.

@@ -18,15 +18,15 @@ final class IfthenpayPayload {
 	 */
 	public static function build_pay_by_link_payload( array $args ): array {
 		// $id doubles as both ifthenpay's tracking reference (see Process::generate_pbl_ref())
-		// and, since it's the only "id" ifthenpay exposes back to the customer, the human-visible
-		// order number shown both in the description below and on ifthenpay's own hosted page.
+		// and the order number shown on ifthenpay's own hosted page. I send the description as
+		// given, so the merchant decides whether it includes the order number via {payment_id}.
 		$id          = (string) ( $args['id'] ?? '' );
 		$description = sanitize_text_field( $args['description'] ?? '' );
 
 		$payload = [
 			'id'          => $id,
 			'amount'      => self::format_amount( $args['amount'] ?? 0 ),
-			'description' => self::build_description( $id, $description ),
+			'description' => $description,
 			'accounts'    => (string) ( $args['accounts'] ?? '' ),
 			'success_url' => $args['success_url'] ?? '',
 			'error_url'   => $args['error_url'] ?? '',
@@ -396,16 +396,6 @@ final class IfthenpayPayload {
 	 */
 	public static function generate_customer_id(): string {
 		return is_user_logged_in() ? (string) get_current_user_id() : 'guest';
-	}
-
-	private static function build_description( string $id, string $description ): string {
-		if ( $id === '' ) {
-			return $description;
-		}
-
-		return $description !== ''
-			? sprintf( 'Order #%s - %s', $id, $description )
-			: sprintf( 'Order #%s', $id );
 	}
 
 	/**
