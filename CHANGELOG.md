@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 
 The format loosely follows Keep a Changelog recommendations.
+
+## [2.1.2] - 2026-10-14
+## Fixed
+- Bumped the plugin version and `Stable tag` in `readme.txt` to **2.1.2**.
+- Updated the version header in the main PHP file to **2.1.2**.
+
 ## [2.1.1] - 2026-10-12
 
 ### Added
